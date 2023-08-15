@@ -9,7 +9,6 @@
     <script src="dist/js/bootstrap.min.js"></script>
     <style>
 body{font-family:Arial,sans-serif;margin:20px;}label{font-weight:bold;}.negative{background-color:#c2c2c2;}.th-info{font-size:60%;font-weight:100;}.liveYear{color:rgba(214,39,40,1);}#monthlyExpensesDisplay,#principalDisplay{font-size:80%;color:gray;}.floating-text{position:absolute;top:33px;right:10px;background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:5px;pointer-events:none;z-index:100;font-size:80%;color:#555555;font-weight:100;}.interest-cell{color:rgba(31,119,180,1);}.annual-expenses-cell{color:rgba(44,160,44,1);}.principal-cell{color:rgba(214,39,40,1);}.alert-info{font-size:80%;}.bg-liability{background-color:rgba(230,230,230,0.85);animation:fadeInBackground 1s ease-in-out;}@keyframes fadeInBackground{from{background-color:transparent;}to{background-color:rgba(230,230,230,0.85);}}.btn-black{color:#fff;background-color:#333;border-color:#333;}.btn-black:hover{color:#fff;background-color:#000;border-color:#000;}input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}.subscript{color:#888888;}#startYear{color:#888888;max-width:70px;}
-
     </style>
     <script src="dist/chart.min.js"></script>
 </head>
@@ -87,9 +86,16 @@ body{font-family:Arial,sans-serif;margin:20px;}label{font-weight:bold;}.negative
             </div>
         </div>
     </div>
-    <div class="col-md-2 form-group offset-md-2">
+    <div class="col-md-2 form-group d-flex justify-content-center align-items-center">
         <label><br></label>
-        <div class="input-group">
+        <div class="input-group justify-content-center">
+            <button class="btn btn-black btn-lg" onclick="location.reload()">重置</button>
+        </div>
+    </div>
+
+    <div class="col-md-2 form-group d-flex justify-content-center align-items-center">
+        <label><br></label>
+        <div class="input-group justify-content-center">
             <button class="btn btn-black btn-lg" onclick="calculateInterest()">计算</button>
         </div>
     </div>
