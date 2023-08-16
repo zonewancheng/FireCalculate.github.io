@@ -103,4 +103,6 @@ input::-webkit-inner-spin-button {
     height: 0;
     overflow: hidden;
     transition: height 0.3s ease-in-out;
+    font-size: 80%;
+    color: #555555;
 }

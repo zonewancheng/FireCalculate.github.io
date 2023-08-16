@@ -202,9 +202,9 @@ $(document).ready(function () {
             let newRowHtml = `
                 <tr class="detailed-calculation">
                     <td></td>
-                    <td class="text-center th-info">= ${annualInterestCalculation}</td>
-                    <td class="text-center th-info">= ${annualExpensesCalculation}</td>
-                    <td class="text-center th-info">= ${principalCalculation}</td>
+                    <td class="text-center">= ${annualInterestCalculation}</td>
+                    <td class="text-center">= ${annualExpensesCalculation}</td>
+                    <td class="text-center">= ${principalCalculation}</td>
                 </tr>
             `;
             // 在点击行的后面插入新行
