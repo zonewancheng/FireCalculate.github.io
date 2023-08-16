@@ -40,15 +40,15 @@ label {
     font-weight: 100;
 }
 
-.interest-cell {
+.interest-cell, .interest-color {
     color: rgba(31, 119, 180, 1);
 }
 
-.annual-expenses-cell {
+.annual-expenses-cell, .expenses-color {
     color: rgba(44, 160, 44, 1);
 }
 
-.principal-cell {
+.principal-cell, .principal-color {
     color: rgba(214, 39, 40, 1);
 }
 
@@ -96,6 +96,7 @@ input::-webkit-inner-spin-button {
     color: #888888;
     max-width: 70px;
 }
+
 .detailed-calculation {
     background-color: #f8f9fa;
     border-top: 1px solid #dee2e6;

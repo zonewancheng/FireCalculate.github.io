@@ -137,6 +137,8 @@ function showAlert(errors) {
     $('#alertModal').modal('show');
 }
 
+let lineChart;
+
 function drawLineChart(years, interests, principals, expenses) {
     if (lineChart) {
         lineChart.destroy();
@@ -150,16 +152,16 @@ function drawLineChart(years, interests, principals, expenses) {
         data: {
             labels: years,
             datasets: [{
-                label: '年利息',
-                data: interests,
-                borderColor: 'rgba(31, 119, 180, 1)',
-                backgroundColor: 'rgba(31, 119, 180, 0.2)',
-                fill: true,
-            }, {
                 label: '消费',
                 data: expenses,
                 borderColor: 'rgba(44, 160, 44, 1)',
                 backgroundColor: 'rgba(44, 160, 44, 0.2)',
+                fill: true,
+            }, {
+                label: '年利息',
+                data: interests,
+                borderColor: 'rgba(31, 119, 180, 1)',
+                backgroundColor: 'rgba(31, 119, 180, 0.2)',
                 fill: true,
             }, {
                 label: '本金',
@@ -194,17 +196,17 @@ $(document).ready(function () {
             let lastPrincipal = parseFloat(firstRow ? principalEle.value.toString() : clickedRow.prev().find('.principal-cell').text());
             let lastAnnualExpenses = parseFloat(firstRow ? annualExpensesEle.value.toString() : clickedRow.prev().find('.annual-expenses-cell').text());
 
-            let annualInterestCalculation = `${lastPrincipal.toFixed(2)} × ${annualInterestRateEle.value}%`;
-            let annualExpensesCalculation = `(1 + ${inflationRateEle.value.toString()}%) × ${((firstRow ? 1 : -1) * lastAnnualExpenses).toFixed(2)}`;
-            let principalCalculation = `${lastPrincipal.toFixed(2)} + ${lastAnnualInterest.toFixed(2)} + ${stableIncomeEle.value} - ${(-1 * annualExpenses).toFixed(2)}`;
+            let annualExpensesCalculation = `(1+${inflationRateEle.value.toString()}%)×<span class="expenses-color">${((firstRow ? 1 : -1) * lastAnnualExpenses).toFixed(2)}</span>`;
+            let annualInterestCalculation = `(<span class="principal-color">${lastPrincipal.toFixed(2)}</span>-<span class="expenses-color">${(-1 * annualExpenses).toFixed(2)}</span>)×${annualInterestRateEle.value}%`;
+            let principalCalculation = `<span class="principal-color">${lastPrincipal.toFixed(2)}</span>-<span class="expenses-color">${(-1 * annualExpenses).toFixed(2)}</span>+<span class="interest-color">${lastAnnualInterest.toFixed(2)}</span>+${stableIncomeEle.value}`;
 
             // 创建新的行以显示详细计算结果interestCell.classList.add("interest-cell", "text-center");
             let newRowHtml = `
                 <tr class="detailed-calculation">
                     <td></td>
-                    <td class="text-center">= ${annualInterestCalculation}</td>
-                    <td class="text-center">= ${annualExpensesCalculation}</td>
-                    <td class="text-center">= ${principalCalculation}</td>
+                    <td class="text-center">=${annualExpensesCalculation}</td>
+                    <td class="text-center">=${annualInterestCalculation}</td>
+                    <td class="text-center">=${principalCalculation}</td>
                 </tr>
             `;
             // 在点击行的后面插入新行
