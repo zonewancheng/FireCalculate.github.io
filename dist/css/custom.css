@@ -107,3 +107,43 @@ input::-webkit-inner-spin-button {
     font-size: 80%;
     color: #555555;
 }
+
+
+/*alert*/
+.douban-logo, mb-2 {
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.douban-d {
+    color: #2e963d;
+    letter-spacing: -0.3em;
+}
+
+.douban-o {
+    color: #2396cd;
+    letter-spacing: -0.3em;
+}
+
+.douban-u {
+    color: #f7c58e;
+    letter-spacing: -0.3em;
+}
+
+.douban-b {
+    color: #2e963d;
+    letter-spacing: -0.3em;
+}
+
+.douban-a {
+    color: #2396cd;
+    letter-spacing: -0.3em;
+}
+
+.douban-n {
+    color: #f7c58e;
+    letter-spacing: -0.3em;
+}
+
+.bg-fbfbfa {
+    background-color: #fbfbfa;
+}
