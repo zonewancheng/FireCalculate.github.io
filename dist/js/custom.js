@@ -36,8 +36,17 @@ function incrementInterestRate() {
 }
 
 function decrementInterestRate() {
-    annualInterestRateEle.stepDown();
-    calculateInterest();
+    if (annualInterestRateEle.value > 0) {
+        annualInterestRateEle.stepDown();
+        calculateInterest();
+    }
+}
+
+function resetInterestRate() {
+    if (annualInterestRateEle.value > 0) {
+        annualInterestRateEle.value = 0;
+        calculateInterest();
+    }
 }
 
 function incrementPrincipal() {
@@ -74,13 +83,17 @@ function incrementInflationRate() {
 }
 
 function decrementInflationRate() {
-    inflationRateEle.stepDown();
-    calculateInterest();
+    if (inflationRateEle.value > 0) {
+        inflationRateEle.stepDown();
+        calculateInterest();
+    }
 }
 
 function resetInflationRate() {
-    inflationRateEle.value = 0;
-    calculateInterest();
+    if (inflationRateEle.value > 0) {
+        inflationRateEle.value = 0;
+        calculateInterest();
+    }
 }
 
 function incrementStableIncome() {
