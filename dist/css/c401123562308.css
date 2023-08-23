@@ -148,3 +148,6 @@ input::-webkit-inner-spin-button {
 .hidden {
     display: none;
 }
+.align-top {
+    vertical-align: top !important;
+}
