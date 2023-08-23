@@ -145,3 +145,6 @@ input::-webkit-inner-spin-button {
 .bg-fbfbfa {
     background-color: #fbfbfa;
 }
+.hidden {
+    display: none;
+}
