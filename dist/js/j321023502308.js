@@ -184,11 +184,11 @@ function innerHTMLExpense(annualExpensesCell, annualExpenses, additionalExpenses
         </div>
         <div class="col-3 order-3">
             <div class="d-flex align-items-center justify-content-end text-right">
-                <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense0 hidden mr-1">0</button>
+                <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense0 hidden mr-1" title="后续所有年额外支出清零">0</button>
 <!--
                 <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense1 hidden mr-1">↓</button>
 -->
-                <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense2 hidden">↑</button>
+                <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense2 hidden" title="后续所有年增加额外支出">↑</button>
             </div>
         </div>
     </div>
@@ -210,11 +210,11 @@ function innerHTMLIncome(interestCell, annualInterest, additionalIncome) {
         </div>
         <div class="col-3 order-3">
             <div class="d-flex align-items-center justify-content-end text-right">
-                <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income0 hidden mr-1">0</button>
+                <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income0 hidden mr-1" title="后续所有年额外收入清零">0</button>
 <!--
                 <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income1 hidden mr-1">↓</button>
 -->
-                <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income2 hidden">↑</button>
+                <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income2 hidden" title="后续所有年增加额外收入">↑</button>
             </div>
         </div>
     </div>
