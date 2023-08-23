@@ -176,13 +176,13 @@ function innerHTMLExpense(annualExpensesCell, annualExpenses, additionalExpenses
         `
 <td>
     <div class="row">
-        <div class="col-5 order-1">
+        <div class="col-4 order-1">
             <div class="text-right">${annualExpenses.toFixed(2)}</div>
         </div>
         <div class="col-5 order-2">
             <div class="text-left">${additionalExpenses != 0 ? additionalExpenses : ""} ${principal <= 0 ? "(不足)" : ""}</div>
         </div>
-        <div class="col-2 order-3">
+        <div class="col-3 order-3">
             <div class="d-flex align-items-center justify-content-end text-right">
                 <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense0 hidden mr-1">0</button>
 <!--
@@ -202,13 +202,13 @@ function innerHTMLIncome(interestCell, annualInterest, additionalIncome) {
         `
 <td>
     <div class="row">
-        <div class="col-5 order-1">
+        <div class="col-4 order-1">
             <div class="text-right">${annualInterest.toFixed(2)}</div>
         </div>
         <div class="col-5 order-2">
             <div class="text-left">${additionalIncome != 0 ? "+" + additionalIncome : ""}</div>
         </div>
-        <div class="col-2 order-3">
+        <div class="col-3 order-3">
             <div class="d-flex align-items-center justify-content-end text-right">
                 <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income0 hidden mr-1">0</button>
 <!--
