@@ -422,12 +422,13 @@ function parseFloatInfo(principal, annualInterestRate, stableIncome, annualExpen
     return floatingInfo;
 }
 
-function showFloatingInfo(floatingInfo) {
+function showFloatingInfo(floatingInfo, liveYearCount) {
     let floatingText = document.getElementById("floatingText");
     floatingText.innerHTML = "";
 
     const summarizeMap = (sourceMap) => {
         return Array.from(sourceMap.entries())
+            .filter(([year]) => year <= liveYearCount)
             .sort(([yearA], [yearB]) => yearA - yearB)
             .slice(0, 10)
             .map(([year, value]) => `年${year}: ${value}`);
