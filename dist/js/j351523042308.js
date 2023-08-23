@@ -151,7 +151,7 @@ function showAlert(errors) {
 }
 
 //
-function checkForm(principal, annualInterestRate, stableIncome, annualExpenses, inflationRate) {
+function parseError(principal, annualInterestRate, stableIncome, annualExpenses, inflationRate) {
     let errors = [];
     if (isNaN(principal) || principal < 0 || principal > 999999999999999) {
         errors.push("0 ≤ 本金 ≤ 999999999999999（如:2000000）");
@@ -389,3 +389,104 @@ $(document).ready(function () {
         handleIncomeButtonClick.call(this, event, true);
     });
 });
+
+
+//
+
+function parseFloatInfo(principal, annualInterestRate, stableIncome, annualExpenses, inflationRate) {
+    let floatingInfo = '<div>';
+
+    if (principal !== 0) {
+        floatingInfo += `<strong>本金:</strong> ${principal} `;
+    }
+
+    if (annualInterestRate !== 0) {
+        floatingInfo += `<strong>年化:</strong> ${annualInterestRate}% `;
+    }
+
+    if (stableIncome !== 0) {
+        floatingInfo += `<strong>年收入:</strong> ${stableIncome} `;
+    }
+
+    floatingInfo += '</div><div>';
+
+    if (annualExpenses !== 0) {
+        floatingInfo += `<strong>年消费:</strong> ${annualExpenses} `;
+    }
+
+    if (inflationRate !== 0) {
+        floatingInfo += `<strong>通胀率:</strong> ${inflationRate}% `;
+    }
+
+    floatingInfo += '</div>';
+    return floatingInfo;
+}
+
+function showFloatingInfo(floatingInfo) {
+    let floatingText = document.getElementById("floatingText");
+    floatingText.innerHTML = "";
+
+    const summarizeMap = (sourceMap) => {
+        return Array.from(sourceMap.entries())
+            .sort(([yearA], [yearB]) => yearA - yearB)
+            .slice(0, 10)
+            .map(([year, value]) => `年${year}: ${value}`);
+    };
+
+    const expensesSummary = summarizeMap(additionalExpensesMap);
+    const incomeSummary = summarizeMap(additionalIncomeMap);
+
+    if (additionalExpensesMap.size > 10) {
+        expensesSummary.push("...");
+    }
+    if (additionalIncomeMap.size > 10) {
+        incomeSummary.push("...");
+    }
+
+    const createDiv = (innerHTML, flex, paddingRight, paddingLeft, title) => {
+        const div = document.createElement("div");
+        div.style.flex = flex;
+        div.style.paddingRight = paddingRight;
+        div.style.paddingLeft = paddingLeft;
+        div.style.textAlign = "center";
+
+        const titleDiv = document.createElement("div");
+        titleDiv.textContent = title;
+        titleDiv.style.fontWeight = "bold";
+        titleDiv.style.textAlign = "center";
+        div.appendChild(titleDiv);
+
+        const contentDiv = document.createElement("div");
+        contentDiv.innerHTML = innerHTML;
+        div.appendChild(contentDiv);
+
+        return div;
+    };
+
+    const mainDiv = document.createElement("div");
+    mainDiv.style.display = "flex";
+    mainDiv.style.flexDirection = "column";
+    mainDiv.style.alignItems = "center";
+
+    const floatingDiv = document.createElement("div");
+    floatingDiv.innerHTML = floatingInfo;
+    floatingDiv.style.marginBottom = "5px";
+    mainDiv.appendChild(floatingDiv);
+
+    const flexContainer = document.createElement("div");
+    flexContainer.style.display = "flex";
+    flexContainer.style.width = "100%";
+
+    if (additionalExpensesMap.size > 0) {
+        const expenseDiv = createDiv(expensesSummary.join("<br>"), "1", "10px", "0", "额外支出");
+        flexContainer.appendChild(expenseDiv);
+    }
+
+    if (additionalIncomeMap.size > 0) {
+        const incomeDiv = createDiv(incomeSummary.join("<br>"), "1", "0", "10px", "额外收入");
+        flexContainer.appendChild(incomeDiv);
+    }
+
+    mainDiv.appendChild(flexContainer);
+    floatingText.appendChild(mainDiv);
+}
