@@ -155,6 +155,38 @@ input::-webkit-inner-spin-button {
     vertical-align: top !important;
 }
 
-.btn-extra-expense, .btn-extra-income {
-    width: 24px;
+.btn-extra-expense {
+    color: rgba(44, 160, 44, 1);
+    background-color: transparent;
+    border: 1px solid rgba(44, 160, 44, 1);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-extra-expense:hover {
+    background-color: rgba(44, 160, 44, 0.1);
+    color: rgba(44, 160, 44, 0.8);
+}
+
+.btn-extra-expense:active {
+    background-color: rgba(44, 160, 44, 0.2);
+    color: rgba(44, 160, 44, 1);
+    border-color: rgba(44, 160, 44, 1);
+}
+
+.btn-extra-income {
+    color: rgba(31, 119, 180, 1);
+    background-color: transparent;
+    border: 1px solid rgba(31, 119, 180, 1);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-extra-income:hover {
+    background-color: rgba(31, 119, 180, 0.1);
+    color: rgba(31, 119, 180, 0.8);
+}
+
+.btn-extra-income:active {
+    background-color: rgba(31, 119, 180, 0.2);
+    color: rgba(31, 119, 180, 1);
+    border-color: rgba(31, 119, 180, 1);
 }
