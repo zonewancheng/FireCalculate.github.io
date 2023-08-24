@@ -190,3 +190,21 @@ input::-webkit-inner-spin-button {
     color: rgba(31, 119, 180, 1);
     border-color: rgba(31, 119, 180, 1);
 }
+
+.collapse-button {
+    color: #212529;
+    background-color: transparent;
+    border: none;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    cursor: pointer;
+    font-size: 18px;
+}
+.collapse-button:hover {
+    background-color: #dee2e6;
+    color: #495057;
+}
+.collapse-button:active {
+    background-color: #dee2e6;
+    color: #343a40;
+    border-color: #adb5bd;
+}

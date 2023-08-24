@@ -185,9 +185,9 @@ function innerHTMLExpense(annualExpensesCell, annualExpenses, additionalExpenses
         <div class="col-3 order-3 ${principal <= 0 ? 'd-none' : ''}">
             <div class="d-flex align-items-center justify-content-end text-right">
                 <div class="d-flex flex-grow-1">
-                    <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense0 hidden mx-1" title="后续所有年额外支出清零">0</button>
+                    <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense0 hidden mx-1" title="自后所有年清零额外支出">𝟎</button>
                     <!-- <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense1 hidden mx-1">↓</button> -->
-                    <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense2 hidden mx-1" title="后续所有年增加额外支出">↑</button>
+                    <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense2 hidden mx-1" title="自后所有年增加额外支出">↑</button>
                 </div>
             </div>
         </div>
@@ -213,9 +213,9 @@ function innerHTMLIncome(interestCell, annualInterest, additionalIncome) {
         <div class="col-3 order-3">
             <div class="d-flex align-items-center justify-content-end text-right">
                 <div class="d-flex flex-grow-1">
-                    <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income0 hidden mx-1" title="后续所有年额外收入清零">0</button>
+                    <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income0 hidden mx-1" title="自后所有年清零额外收入">𝟎</button>
                     <!-- <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income1 hidden mx-1">↓</button> -->
-                    <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income2 hidden mx-1" title="后续所有年增加额外收入">↑</button>
+                    <button class="btn btn-sm btn-secondary btn-extra-income btn-extra-income2 hidden mx-1" title="自后所有年增加额外收入">↑</button>
                 </div>
             </div>
         </div>
@@ -270,10 +270,6 @@ function drawLineChart(noChart, years, interests, principals, expenses) {
 
 function performRowClickOperations(clickedCell) {
     let clickedRow = clickedCell.closest('tr');
-
-    let extraExpenseButton = clickedRow.find('.btn-extra-expense');
-    let extraIncomeButton = clickedRow.find('.btn-extra-income');
-
     // 检查是否点击的是刚刚生成的详细计算行
     if (!clickedRow.hasClass('detailed-calculation')) {
         $('.detailed-calculation').remove();
@@ -282,8 +278,9 @@ function performRowClickOperations(clickedCell) {
     }
     // 检查是否为第一行或本金为0的行
     if (parseFloat(clickedRow.find('.principal-cell').text()) > 0) {
-        extraExpenseButton.removeClass('hidden');
-        extraIncomeButton.removeClass('hidden');
+        clickedRow.find('.btn-extra-expense').removeClass('hidden');
+        clickedRow.find('.btn-extra-income').removeClass('hidden');
+
         let firstRow = clickedRow.is(':first-child');
 
         let regex = /-?\d+(\.\d+)?/g;
@@ -299,6 +296,7 @@ function performRowClickOperations(clickedCell) {
         } else {
             当前年支出 = 支出1.toFixed(2);
             当前年额外支出 = "";
+            clickedRow.find('.btn-extra-expense0').css('visibility', 'hidden');
         }
 
         // console.log("-----------1")
@@ -320,6 +318,7 @@ function performRowClickOperations(clickedCell) {
         } else {
             当前年收入 = 收入1.toFixed(2);
             当前年额外收入 = "";
+            clickedRow.find('.btn-extra-income0').css('visibility', 'hidden');
         }
 
         // console.log("-----------2")
@@ -347,7 +346,9 @@ function performRowClickOperations(clickedCell) {
 
         let newRowHtml = `
                 <tr class="detailed-calculation">
-                    <td></td>
+                    <td class="text-center">
+                        <button class="collapse-button" title="收起">⤢</button>
+                    </td>
                     <td class="text-center">=${annualExpensesCalculation}</td>
                     <td class="text-center">=${annualInterestCalculation}</td>
                     <td class="text-center">=${principalCalculation}</td>
@@ -405,6 +406,13 @@ $(document).ready(function () {
     $(document).on('click', 'td', function () {
         let clickedCell = $(this);
         performRowClickOperations(clickedCell);
+    });
+
+    $(document).on('click', '.collapse-button', function (event) {
+        event.stopPropagation();
+        $('.detailed-calculation').remove();
+        $('.btn-extra-expense').addClass('hidden');
+        $('.btn-extra-income').addClass('hidden');
     });
 
     $(document).on('click', '.btn-extra-expense0', function (event) {
