@@ -146,9 +146,15 @@ input::-webkit-inner-spin-button {
 .bg-fbfbfa {
     background-color: #fbfbfa;
 }
+
 .hidden {
     display: none;
 }
+
 .align-top {
     vertical-align: top !important;
+}
+
+.btn-extra-expense, .btn-extra-income {
+    width: 24px;
 }
