@@ -175,14 +175,14 @@ function innerHTMLExpense(annualExpensesCell, annualExpenses, additionalExpenses
     annualExpensesCell.innerHTML =
         `
 <td>
-    <div class="row">
-        <div class="col-4 order-1">
-            <div class="text-right">${annualExpenses.toFixed(2)}</div>
+    <div class="row ${principal <= 0 ? 'justify-content-center' : ''}">
+        <div class="col-4 order-1 ${principal <= 0 ? 'd-none' : ''}">
+            <div class="text-right">${additionalExpenses != 0 ? additionalExpenses : ""}</div>
         </div>
-        <div class="col-5 order-2">
-            <div class="text-left">${additionalExpenses != 0 ? additionalExpenses : ""} ${principal <= 0 ? "(不足)" : ""}</div>
+        <div class="${principal <= 0 ? '' : 'col-5 order-2'}">
+            <div class="${principal <= 0 ? 'text-center' : 'text-left'}">${annualExpenses.toFixed(2)} ${principal <= 0 ? "(不足)" : ""}</div>
         </div>
-        <div class="col-3 order-3">
+        <div class="col-3 order-3 ${principal <= 0 ? 'd-none' : ''}">
             <div class="d-flex align-items-center justify-content-end text-right">
                 <div class="d-flex flex-grow-1">
                     <button class="btn btn-sm btn-secondary btn-extra-expense btn-extra-expense0 hidden mx-1" title="后续所有年额外支出清零">0</button>
@@ -195,6 +195,7 @@ function innerHTMLExpense(annualExpensesCell, annualExpenses, additionalExpenses
 </td>
 
 
+
         `
 }
 
@@ -204,10 +205,10 @@ function innerHTMLIncome(interestCell, annualInterest, additionalIncome) {
 <td>
     <div class="row">
         <div class="col-4 order-1">
-            <div class="text-right">${annualInterest.toFixed(2)}</div>
+            <div class="text-right">${additionalIncome != 0 ? additionalIncome : ""}</div>
         </div>
         <div class="col-5 order-2">
-            <div class="text-left">${additionalIncome != 0 ? "+" + additionalIncome : ""}</div>
+            <div class="text-left">${annualInterest.toFixed(2)}</div>
         </div>
         <div class="col-3 order-3">
             <div class="d-flex align-items-center justify-content-end text-right">
@@ -287,23 +288,62 @@ function performRowClickOperations(clickedCell) {
 
         let regex = /-?\d+(\.\d+)?/g;
         // 计算详细值
-        let 当前年消费Str = clickedRow.find('.annual-expenses-cell').text();
-        let matchesExpense = 当前年消费Str.match(regex);
-        let annualExpenses = parseFloat(matchesExpense[0]);
-        let 当前年额外支出 = isNaN(parseFloat(matchesExpense[1])) ? "" : parseFloat(matchesExpense[1]);
+        let matchesExpense = clickedRow.find('.annual-expenses-cell').text().match(regex);
+        let 支出1 = parseFloat(matchesExpense[0]);
+        let 支出2 = parseFloat(matchesExpense[1]);
 
-        let 当前年利息Str = clickedRow.find('.interest-cell').text();
-        let matchesIncome = 当前年利息Str.match(regex);
-        let lastAnnualInterest = parseFloat(matchesIncome[0]);
-        let extraIncome = isNaN(parseFloat(matchesIncome[1])) ? "" : parseFloat(matchesIncome[1]);
+        let 当前年支出, 当前年额外支出;
+        if (Math.abs(支出2) > 0) {
+            当前年支出 = 支出2.toFixed(2);
+            当前年额外支出 = 支出1;
+        } else {
+            当前年支出 = 支出1.toFixed(2);
+            当前年额外支出 = "";
+        }
 
+        // console.log("-----------1")
+        // console.log(matchesExpense[0])
+        // console.log(matchesExpense[1])
+        // console.log(支出1)
+        // console.log(支出2)
+        // console.log(当前年支出)
+        // console.log(当前年额外支出)
+
+        let matchesIncome = clickedRow.find('.interest-cell').text().match(regex);
+        let 收入1 = parseFloat(matchesIncome[0]);
+        let 收入2 = parseFloat(matchesIncome[1]);
+
+        let 当前年收入, 当前年额外收入;
+        if (Math.abs(收入2) > 0) {
+            当前年收入 = 收入2.toFixed(2);
+            当前年额外收入 = 收入1 + "+";
+        } else {
+            当前年收入 = 收入1.toFixed(2);
+            当前年额外收入 = "";
+        }
+
+        // console.log("-----------2")
+        // console.log(matchesIncome[0])
+        // console.log(matchesIncome[1])
+        // console.log(收入1)
+        // console.log(收入2)
+        // console.log(当前年收入)
+        // console.log(当前年额外收入)
 
         let lastPrincipal = parseFloat(firstRow ? principalEle.value.toString() : clickedRow.prev().find('.principal-cell').text());
-        let lastAnnualExpenses = parseFloat(firstRow ? annualExpensesEle.value.toString() : clickedRow.prev().find('.annual-expenses-cell').text());
+        let lastAnnualExpenses;
+        if (firstRow) {
+            lastAnnualExpenses = annualExpensesEle.value.toString()
+        } else {
+            let matchesLastExpense = clickedRow.prev().find('.annual-expenses-cell').text().match(regex);
+            let 支出1 = parseFloat(matchesLastExpense[0]);
+            let 支出2 = parseFloat(matchesLastExpense[1]);
+            lastAnnualExpenses = Math.abs(支出2) > 0 ? 支出2 : 支出1;
+        }
 
-        let annualExpensesCalculation = `-(1+${inflationRateEle.value.toString()}%)×<span class="expenses-color">${((firstRow ? 1 : -1) * lastAnnualExpenses).toFixed(2)}${当前年额外支出}</span>`;
-        let annualInterestCalculation = `(<span class="principal-color">${lastPrincipal.toFixed(2)}</span><span class="expenses-color">${annualExpenses.toFixed(2)}${当前年额外支出}</span>)×${annualInterestRateEle.value}%${extraIncome > 0 ? "+" + extraIncome : ""}`;
-        let principalCalculation = `<span class="principal-color">${lastPrincipal.toFixed(2)}</span><span class="expenses-color">${annualExpenses.toFixed(2)}${当前年额外支出}</span>+<span class="interest-color">${lastAnnualInterest.toFixed(2)}${extraIncome > 0 ? "+" + extraIncome : ""}</span>${stableIncomeEle.value > 0 ? "+" + stableIncomeEle.value : ""}`;
+        let annualExpensesCalculation = `<span class="expenses-color">${当前年额外支出}</span>-(1+${inflationRateEle.value.toString()}%)×<span class="expenses-color">${((firstRow ? 1 : -1) * lastAnnualExpenses).toFixed(2)}</span>`;
+        let annualInterestCalculation = `<span class="interest-color">${当前年额外收入}</span>(<span class="principal-color">${lastPrincipal.toFixed(2)}</span><span class="expenses-color">${当前年额外支出}${当前年支出}</span>)×${annualInterestRateEle.value}%`;
+        let principalCalculation = `<span class="principal-color">${lastPrincipal.toFixed(2)}</span><span class="expenses-color">${当前年额外支出}${当前年支出}</span>+<span class="interest-color">${当前年额外收入}${当前年收入}</span>${stableIncomeEle.value > 0 ? "+" + stableIncomeEle.value : ""}`;
 
         let newRowHtml = `
                 <tr class="detailed-calculation">
@@ -313,8 +353,6 @@ function performRowClickOperations(clickedCell) {
                     <td class="text-center">=${principalCalculation}</td>
                 </tr>
             `;
-        //console.log(newRowHtml)
-        // 在点击行的后面插入新行
         clickedRow.after(newRowHtml);
     }
 }
@@ -322,9 +360,10 @@ function performRowClickOperations(clickedCell) {
 let defaultOpenCellYearCount = 0;
 let additionalExpensesMap = new Map();
 let additionalIncomeMap = new Map();
+let liveYear;
 
 function updateMapValues(map, startYear, value, reset) {
-    for (let i = startYear; i < 101; i++) {
+    for (let i = startYear; i <= liveYear; i++) {
         if (reset || value === 0) {
             map.delete(i);
         } else {
@@ -492,4 +531,14 @@ function showFloatingInfo(floatingInfo, liveYearCount) {
 
     mainDiv.appendChild(flexContainer);
     floatingText.appendChild(mainDiv);
+}
+
+function setTableTitle() {
+    function setTitle(selector, formula) {
+        let element = document.querySelector(selector);
+        element.textContent = formula;
+    }
+
+    setTitle(".expense-title", (additionalExpensesMap.size === 0 ? "" : "支出+") + "(1+通胀率%)×上年消费");
+    setTitle(".income-title", (additionalIncomeMap.size === 0 ? "" : "收入+") + "(上年本金-年消费)×年化利率%");
 }
