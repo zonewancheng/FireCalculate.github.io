@@ -363,7 +363,8 @@ let additionalIncomeMap = new Map();
 let liveYear;
 
 function updateMapValues(map, startYear, value, reset) {
-    for (let i = startYear; i <= liveYear; i++) {
+    let maxYear = reset ? 101 : liveYear;
+    for (let i = startYear; i <= maxYear; i++) {
         if (reset || value === 0) {
             map.delete(i);
         } else {
