@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时钟图</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <link rel="stylesheet" href="dist/css/bootstrap.min.css">
+    <script src="dist/js/jquery-3.7.0.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <style>
+        .center-text {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="tableDiv" class="container">
+    <div class="center-text">
+        <svg id="clock"></svg>
+    </div>
+    <div class="center-text">
+        <h2>FIRE生活日程</h2>
+    </div>
+    <table class="table center-table center-text">
+        <thead>
+        <tr>
+            <th></th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th id="totalDuration">时长</th>
+            <th>生活日程</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="scheduleTable">
+        </tbody>
+    </table>
+    <div id="currentTime" class="center-text"></div>
+</div>
+<script src="dist/js/j121623571109.js"></script>
+<script>
+    $(document).ready(function () {
+        renderSchedule();
+        $("#addRow").click(function () {
+            addRow();
+        });
+        $("#drawButton").click(function () {
+            draw(schedule);
+        });
+    });
+    draw(schedule);
+</script>
+
+</body>
+</html>
