@@ -285,7 +285,8 @@ function handleOverlapping(index) {
         if (i !== index) {
             let start = schedule[index].start;
             let end = schedule[index].end;
-            if (
+            if (start == end) {
+            } else if (
                 (start < item.end && end > item.start) ||
                 (start + 24 < item.end && end + 24 > item.start) ||
                 (start - 24 < item.end && end - 24 > item.start)
