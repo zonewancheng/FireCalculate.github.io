@@ -1,12 +1,12 @@
 const schedule = [
-    {start: 10.5, end: 12, name: '做饭、吃饭🍚'},
-    {start: 12, end: 14, name: '逛街、玩🏞️'},
+    {start: 10.5, end: 12, name: '做饭🍚'},
+    {start: 12, end: 14, name: '出去玩🏞️'},
     {start: 14, end: 15, name: '玩手机📱'},
     {start: 15, end: 16.5, name: '健身💪'},
-    {start: 16.5, end: 18, name: '做饭、吃饭🍚'},
+    {start: 16.5, end: 18, name: '做饭🍚'},
     {start: 18, end: 20, name: '学习📚'},
-    {start: 20, end: 22, name: '创作💰'},
-    {start: 22, end: 23.5, name: '洗澡🚿'},
+    {start: 20, end: 23, name: '赚钱💰'},
+    {start: 23, end: 23.5, name: '洗澡🚿'},
     {start: 23.5, end: 10.5 + 24, name: '睡觉🛏️'}
 ];
 
