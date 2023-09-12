@@ -182,6 +182,7 @@ function calculateTotalDuration() {
 }
 
 function renderSchedule() {
+    console.log("render")
     const scheduleTable = $("#scheduleTable");
     scheduleTable.empty();
     schedule.forEach((item, index) => {
@@ -192,7 +193,7 @@ function renderSchedule() {
                         <td>${rowNumber}</td>
                         <td>
                             <div class="input-group">
-                                <input type="time" disabled class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
+                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
@@ -201,7 +202,7 @@ function renderSchedule() {
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="time" disabled class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
+                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
@@ -273,8 +274,8 @@ function updateSchedule(index, field, value) {
 }
 
 function handleOverlapping(index) {
-    // console.log("index==" + index)
-    // console.log(schedule)
+    console.log("index==" + index)
+    console.log(schedule)
     const overlappingRows = [];
     schedule.forEach((item, i) => {
         if (i !== index) {
@@ -315,6 +316,10 @@ function adjustTime(index, field, minutes) {
     }
     if (schedule[index].start > schedule[index].end) {
         schedule[index].end += 24;
+    }
+    if (schedule[index].end - schedule[index].start >= 24) {
+        schedule[index].end = schedule[index].end % 24;
+        schedule[index].start = schedule[index].start % 24;
     }
     handleOverlapping(index);
     renderSchedule();

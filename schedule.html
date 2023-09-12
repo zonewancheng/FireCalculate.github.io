@@ -3,19 +3,15 @@
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
     <link rel="icon" href="dist/favicon.ico"/>
-    <title>FIRE日程时钟</title>
+    <title>FIRE的生活时钟</title>
 
     <link rel="stylesheet" href="dist/css/bootstrap.min.css">
-    <script src="dist/js/jquery-3.7.0.min.js"></script>
-    <script src="dist/js/bootstrap.min.js"></script>
-    <script src="dist/js/d3js.org_d3.v7.min.js"></script>
-    <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="dist/css/c070423032508.css">
     <style>
         .center-text {
             text-align: center;
             margin-top: 20px;
         }
-
         .hide-button {
             visibility: hidden;
         }
@@ -29,25 +25,50 @@
         <svg id="clock"></svg>
     </div>
     <div class="center-text">
-        <h2>FIRE生活日程</h2>
+        <h2>FIRE的生活时钟</h2>
     </div>
     <table class="table table-hover table-bordered text-center">
         <thead>
         <tr>
             <th></th>
-            <th>开始时间</th>
-            <th>结束时间</th>
+            <th>开始</th>
+            <th>结束</th>
             <th id="totalDuration">时长</th>
             <th>日程</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody id="scheduleTable">
-        <!-- 这里放入表格数据 -->
         </tbody>
     </table>
     <div id="currentTime" class="center-text"></div>
+    <div class="alert alert-info bg-fbfbfa border-0 rounded-0" role="alert">
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <p class="mb-0">
+                    <span class="text-muted">来自</span>
+                    <a href="https://www.douban.com/group/topic/292579186/" target="_blank" class="alert-link">
+                    <span class="douban-logo">
+                        <span class="douban-d">d</span>
+                        <span class="douban-o">o</span>
+                        <span class="douban-u">u</span>
+                        <span class="douban-b">b</span>
+                        <span class="douban-a">a</span>
+                        <span class="douban-n">n</span>
+                    </span>
+                        小组讨论</a>，欢迎改进
+                </p>
+            </div>
+            <div class="ml-2">
+                <!-- 插入小动画图 -->
+                <img src="dist/note.gif" alt="">
+            </div>
+        </div>
+    </div>
 </div>
+<script src="dist/js/jquery-3.7.0.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script src="dist/js/d3js.org_d3.v7.min.js"></script>
 <script src="dist/js/j250423581209.js"></script>
 <script>
     $(document).ready(function () {
