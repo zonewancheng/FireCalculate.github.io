@@ -10,16 +10,18 @@
     <script src="dist/js/bootstrap.min.js"></script>
     <script src="dist/js/d3js.org_d3.v7.min.js"></script>
     <!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
-
     <style>
         .center-text {
             text-align: center;
             margin-top: 20px;
         }
+
+        .hide-button {
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
-
 
 
 <div class="table-responsive">
@@ -27,7 +29,7 @@
         <svg id="clock"></svg>
     </div>
     <div class="center-text">
-        <h2>生活日程</h2>
+        <h2>FIRE生活日程</h2>
     </div>
     <table class="table table-hover table-bordered text-center">
         <thead>
@@ -36,7 +38,7 @@
             <th>开始时间</th>
             <th>结束时间</th>
             <th id="totalDuration">时长</th>
-            <th>生活日程</th>
+            <th>日程</th>
             <th>操作</th>
         </tr>
         </thead>

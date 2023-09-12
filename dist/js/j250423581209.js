@@ -1,3 +1,24 @@
+// const schedule = [
+//     {start: 10.5, end: 12, name: '做饭、吃饭'},
+//     {start: 12, end: 14, name: '看电影刷视频'},
+//     {start: 14, end: 15, name: '健身'},
+//     {start: 15, end: 16, name: '逛街出去玩'},
+//     {start: 16, end: 18, name: '做饭、吃饭'},
+//     {start: 18, end: 20, name: '学习'},
+//     {start: 20, end: 22, name: '创作'},
+//     {start: 22, end: 23.5, name: '洗澡'},
+//     {start: 23.5, end: 10.5 + 24, name: '睡觉'}
+// ];
+
+const schedule = [
+    {start: 10.5, end: 12, name: '吃饭'},
+    {start: 12, end: 16.5, name: '玩手机'},
+    {start: 16.5, end: 18, name: '吃饭'},
+    {start: 18, end: 22, name: '玩手机'},
+    {start: 22, end: 23.5, name: '洗澡'},
+    {start: 23.5, end: 10.5 + 24, name: '睡觉'}
+];
+
 function timeStringToFloat(timeString) {
     const parts = timeString.toString().split(':');
     const hours = parseInt(parts[0]);
@@ -14,18 +35,6 @@ function floatToTimeString(floatTime) {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
     return `${formattedHours}:${formattedMinutes}`;
 }
-
-const schedule = [
-    {start: 10.5, end: 12, name: '做饭、吃饭'},
-    {start: 12, end: 14, name: '看电影刷视频'},
-    {start: 14, end: 15, name: '健身'},
-    {start: 15, end: 16, name: '逛街出去玩'},
-    {start: 16, end: 18, name: '做饭、吃饭'},
-    {start: 18, end: 20, name: '学习'},
-    {start: 20, end: 22, name: '创作'},
-    {start: 22, end: 23.5, name: '洗澡'},
-    {start: 23.5, end: 10.5 + 24, name: '睡觉'}
-];
 
 function draw(schedule) {
     //console.log(schedule)
@@ -47,8 +56,8 @@ function draw(schedule) {
 
     const clockTicks = d3.range(0, hours * 2).map(d => {
         const angle = clockScale(d / 2) - Math.PI / 2;
-        const isHalfHour = d % 2 !== 0; // 判断是否是半小时
-        const tickLength = isHalfHour ? 10 : 0; // 设置大刻度线和小刻度线的长度
+        const isHalfHour = d % 2 !== 0;
+        const tickLength = isHalfHour ? 10 : 0;
         const x1 = centerX + Math.cos(angle) * (radius - tickLength);
         const y1 = centerY + Math.sin(angle) * (radius - tickLength);
         const x2 = centerX + Math.cos(angle) * radius;
@@ -76,6 +85,22 @@ function draw(schedule) {
         .attr("dy", "0.3em")
         .text(d => d.hour);
 
+    const hourPoints = d3.range(0, hours).map(d => {
+        const angle = clockScale(d) - Math.PI / 2;
+        const x = centerX + Math.cos(angle) * (radius - 30); // 调整半径以控制黑点的位置
+        const y = centerY + Math.sin(angle) * (radius - 30);
+        return {x, y};
+    });
+
+    svg.selectAll(".hour-point")
+        .data(hourPoints)
+        .enter().append("circle")
+        .attr("class", "hour-point")
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
+        .attr("r", 3)
+        .attr("fill", "black");
+
     const arcGenerator = d3.arc()
         .innerRadius(0)
         .outerRadius(radius - 30)
@@ -99,20 +124,20 @@ function draw(schedule) {
         .attr("transform", d => {
             const startAngle = clockScale(d.start) - Math.PI / 2;
             const endAngle = clockScale(d.end) - Math.PI / 2;
-            const labelRadius = (radius - 50) / 1; // 放置在扇形区域中心
+            const labelRadius = (radius - 50) / 1;
             const labelAngle = (startAngle + endAngle) / 2;
             const x = centerX + Math.cos(labelAngle) * labelRadius;
             const y = centerY + Math.sin(labelAngle) * labelRadius;
             return `translate(${x},${y})`;
         })
         .attr("text-anchor", "middle")
-        .style("font-size", "10px")
+        .style("font-size", "12px")
         .text(d => d.name);
 
 
     const currentTimeDot = svg.append("circle")
         .attr("class", "current-time-dot")
-        .attr("r", 5) // 设置红点的半径
+        .attr("r", 5)
         .attr("fill", "red");
 
     function updateCurrentTime() {
@@ -140,7 +165,7 @@ function draw(schedule) {
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
-        const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        const formattedDateTime = `${year}-${month}-${day} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         document.getElementById("currentTime").textContent = formattedDateTime;
     }
 
@@ -163,35 +188,42 @@ function renderSchedule() {
         const rowNumber = index + 1;
         const duration = floatToTimeString(item.end - item.start);
         const row = `
-                    <tr>
+                    <tr ${item.isOverlap ? 'class="table-danger"' : ''}>
                         <td>${rowNumber}</td>
                         <td>
                             <div class="input-group">
-                                <input type="time" class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
+                                <input type="time" disabled class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
                                 <div class="input-group-append">
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
+                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
+                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="time" class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
+                                <input type="time" disabled class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
                                 <div class="input-group-append">
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
+                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
+                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
                                 </div>
                             </div>
                         </td>
                         <td>${duration}</td>
-                        <td><input type="text" class="form-control" value="${item.name}" onchange="updateSchedule(${index}, 'name', this.value)"></td>
+                        <td>
+                            <div class="input-group">
+                                 <input type="text" class="form-control" value="${item.name}" onchange="updateSchedule(${index}, 'name', this.value)" oninput="onInputChange(${index})">
+                                 <div class="input-group-append">
+                                    <button id="editButton-${index}" class="btn btn-sm btn-outline-secondary hide-button" onclick="renderSchedule()">✓</button>
+                                 </div>
+                            </div>
+                        </td>
                         <td>
                         <div class="input-group d-flex justify-content-center">
                             <div class="input-group-append">
-                                <button class="btn btn-sm btn-secondary" onclick="deleteRow(${index})">×</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="deleteRow(${index})">×</button>
                                 <button class="btn btn-sm btn-outline-secondary" onclick="moveRowUp(${index})">↑</button>
                                 <button class="btn btn-sm btn-outline-secondary" onclick="moveRowDown(${index})">↓</button>
-                                <button class="btn btn-sm btn-secondary" onclick="addRow(${index + 1})">+</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="addRow(${index + 1})">+</button>
                             </div>
                         </div>
                         </td>
@@ -200,18 +232,11 @@ function renderSchedule() {
         scheduleTable.append(row);
     });
     const totalDuration = calculateTotalDuration();
-    // 判断总时长是否大于24，设置文字颜色
-    if (totalDuration > 24) {
-        $("#totalDuration").css("color", "red");
-    } else if (totalDuration == 24) {
-        $("#totalDuration").css("color", "green");
-    } else {
-        $("#totalDuration").css("color", ""); // 恢复默认颜色
-    }
-
+    $("#totalDuration").css("color", totalDuration > 24 ? "red" : totalDuration == 24 ? "green" : "");
     $("#totalDuration").text(`时长(${totalDuration}h)`);
     draw(schedule);
 }
+
 
 function moveRowUp(index) {
     if (index > 0) {
@@ -243,6 +268,38 @@ function updateSchedule(index, field, value) {
         schedule[index][field] = value.toString().trim();
         renderSchedule();
     }
+    const editButton = document.querySelector(`#editButton-${index}`);
+    editButton.classList.add("hide-button");
+}
+
+function handleOverlapping(index) {
+    // console.log("index==" + index)
+    // console.log(schedule)
+    const overlappingRows = [];
+    schedule.forEach((item, i) => {
+        if (i !== index) {
+            let start = schedule[index].start;
+            let end = schedule[index].end;
+            if (
+                (start < item.end && end > item.start) ||
+                (start + 24 < item.end && end + 24 > item.start) ||
+                (start - 24 < item.end && end - 24 > item.start)
+            ) {
+                overlappingRows.push(i);
+                if (!overlappingRows.includes(index)) {
+                    overlappingRows.push(index);
+                }
+            }
+        }
+    });
+    overlappingRows.forEach((rowIndex) => {
+        schedule[rowIndex].isOverlap = true;
+    });
+    schedule.forEach((item, i) => {
+        if (!overlappingRows.includes(i)) {
+            schedule[i].isOverlap = false;
+        }
+    });
 }
 
 function adjustTime(index, field, minutes) {
@@ -259,6 +316,7 @@ function adjustTime(index, field, minutes) {
     if (schedule[index].start > schedule[index].end) {
         schedule[index].end += 24;
     }
+    handleOverlapping(index);
     renderSchedule();
 }
 
@@ -270,8 +328,15 @@ function deleteRow(index) {
 function addRow(index) {
     if (schedule.length < 20) {
         schedule.splice(index, 0, {start: 0, end: 0, name: ''});
+        handleOverlapping(index);
         renderSchedule();
     } else {
-        alert("已达到最大行数限制 (20 行)。");
+        alert("最多20行~");
     }
+    //console.log(schedule)
+}
+
+function onInputChange(index) {
+    const editButton = document.querySelector(`#editButton-${index}`);
+    editButton.classList.remove("hide-button");
 }
