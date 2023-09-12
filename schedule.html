@@ -32,23 +32,25 @@
         <thead>
         <tr>
             <th></th>
-            <th>开始</th>
-            <th>结束</th>
-            <th id="totalDuration">时长</th>
-            <th>日程</th>
-            <th>操作</th>
+            <th class="text-center align-top">开始</th>
+            <th class="text-center align-top">结束</th>
+            <th class="text-center align-top" id="totalDuration">时长</th>
+            <th class="text-center align-top">日程</th>
+            <th class="text-center align-top">操作</th>
         </tr>
         </thead>
         <tbody id="scheduleTable">
         </tbody>
     </table>
 </div>
-<div id="currentTime" class="center-text"></div>
-<a href="../" class="text-decoration-none" style="color: inherit;">返回计算器</a>
+<div class="d-flex justify-content-between">
+    <a href="../" class="text-decoration-none" style="color: inherit;">返回计算器</a>
+    <span id="currentTime"></span>
+</div>
 <script src="dist/js/jquery-3.7.0.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 <script src="dist/js/d3js.org_d3.v7.min.js"></script>
-<script src="dist/js/j250423581209.js"></script>
+<script src="dist/js/j491023151209.js"></script>
 <script>
     $(document).ready(function () {
         renderSchedule();

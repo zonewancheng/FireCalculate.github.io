@@ -193,18 +193,22 @@ function renderSchedule() {
                         <td>${rowNumber}</td>
                         <td>
                             <div class="input-group">
-                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
+                                </div>                            
+                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
+                                <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
+                                </div>                            
+                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
+                                <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
                                 </div>
                             </div>
