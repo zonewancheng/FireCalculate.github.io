@@ -7,7 +7,7 @@ function timeStringToFloat(timeString) {
 }
 
 function floatToTimeString(floatTime) {
-    floatTime = floatTime % 24; // 获取不超过24的小时数
+    floatTime = floatTime % 24;
     const hours = Math.floor(floatTime);
     const minutes = Math.round((floatTime - hours) * 60);
     const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
@@ -28,7 +28,7 @@ const schedule = [
 ];
 
 function draw(schedule) {
-    console.log(schedule)
+    //console.log(schedule)
     d3.select("#clock").selectAll("*").remove();
     const width = 500;
     const height = 500;
@@ -126,7 +126,10 @@ function draw(schedule) {
         const y = centerY + Math.sin(currentAngle) * (radius - 30);
         svg.selectAll(".schedule-arc")
             .attr("fill", function (d) {
+                //console.log("totalMinutes==" + totalMinutes + ",d.start==" + d.start * 60 + ",d.end==" + d.end * 60)
                 if (totalMinutes >= d.start * 60 && totalMinutes <= d.end * 60) {
+                    return "rgba(44, 160, 44, 0.3)";
+                } else if (totalMinutes + 1440 >= d.start * 60 && totalMinutes + 1440 <= d.end * 60) {
                     return "rgba(44, 160, 44, 0.3)";
                 } else {
                     return "rgb(245,245,245,0.5)";
@@ -166,8 +169,8 @@ function renderSchedule() {
                             <div class="input-group">
                                 <input type="time" class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
-                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
                                 </div>
                             </div>
                         </td>
@@ -175,8 +178,8 @@ function renderSchedule() {
                             <div class="input-group">
                                 <input type="time" class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
-                                    <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
                                 </div>
                             </div>
                         </td>
@@ -185,10 +188,10 @@ function renderSchedule() {
                         <td>
                         <div class="input-group d-flex justify-content-center">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" onclick="deleteRow(${index})">删除</button>
-                                <button class="btn btn-outline-secondary" onclick="moveRowUp(${index})">&#8593;</button>
-                                <button class="btn btn-outline-secondary" onclick="moveRowDown(${index})">&#8595;</button>
-                                <button class="btn btn-secondary" onclick="addRow(${index + 1})">添加</button>
+                                <button class="btn btn-sm btn-secondary" onclick="deleteRow(${index})">×</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="moveRowUp(${index})">↑</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="moveRowDown(${index})">↓</button>
+                                <button class="btn btn-sm btn-secondary" onclick="addRow(${index + 1})">+</button>
                             </div>
                         </div>
                         </td>
@@ -205,7 +208,9 @@ function renderSchedule() {
     } else {
         $("#totalDuration").css("color", ""); // 恢复默认颜色
     }
-    $("#totalDuration").text(`时长(总:${totalDuration}H)`);
+
+    $("#totalDuration").text(`时长(${totalDuration}h)`);
+    draw(schedule);
 }
 
 function moveRowUp(index) {
@@ -214,7 +219,6 @@ function moveRowUp(index) {
         schedule[index] = schedule[index - 1];
         schedule[index - 1] = temp;
         renderSchedule();
-        draw(schedule);
     }
 }
 
@@ -224,23 +228,20 @@ function moveRowDown(index) {
         schedule[index] = schedule[index + 1];
         schedule[index + 1] = temp;
         renderSchedule();
-        draw(schedule);
     }
 }
 
 function updateSchedule(index, field, value) {
     if (field === 'start' || field === 'end') {
         let newTime = timeStringToFloat(value);
-        if (field === 'end' && newTime < schedule[index].start) {
-            newTime += 24;
-        }
         schedule[index][field] = newTime;
+        if (schedule[index].start > schedule[index].end) {
+            schedule[index].end += 24;
+        }
         renderSchedule();
-        draw(schedule);
     } else if (field === 'name') {
         schedule[index][field] = value.toString().trim();
         renderSchedule();
-        draw(schedule);
     }
 }
 
@@ -250,29 +251,26 @@ function adjustTime(index, field, minutes) {
     if (adjustedTime < 0) {
         adjustedTime += 24;
     }
-    if (field === 'end' && adjustedTime < schedule[index].start) {
-        adjustedTime += 24;
-    }
     if (field === 'start') {
         schedule[index].start = adjustedTime;
     } else {
         schedule[index].end = adjustedTime;
     }
+    if (schedule[index].start > schedule[index].end) {
+        schedule[index].end += 24;
+    }
     renderSchedule();
-    draw(schedule);
 }
 
 function deleteRow(index) {
     schedule.splice(index, 1);
     renderSchedule();
-    draw(schedule);
 }
 
 function addRow(index) {
     if (schedule.length < 20) {
         schedule.splice(index, 0, {start: 0, end: 0, name: ''});
         renderSchedule();
-        draw(schedule);
     } else {
         alert("已达到最大行数限制 (20 行)。");
     }
