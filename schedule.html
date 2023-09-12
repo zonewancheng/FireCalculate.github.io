@@ -30,10 +30,13 @@
             cursor: pointer;
         }
         .green-text{
-            ;color: rgba(44, 160, 44);
+            ;color: rgb(44, 160, 44);
         }
         .gray-text{
             color: gray
+        }
+        .btn-outline-secondary{
+            border-radius: 0;
         }
     </style>
 </head>
@@ -41,6 +44,9 @@
 
 
 <div class="table-responsive">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 id="currentTime" class="mx-auto"></h5>
+    </div>
     <div class="center-text">
         <svg id="clock"></svg>
     </div>
@@ -62,9 +68,7 @@
         </tbody>
     </table>
 </div>
-<div class="d-flex justify-content-between align-items-center">
-    <span id="currentTime" class="mx-auto"></span>
-</div>
+
 <div>
     <a href="../" class="text-decoration-none" style="color: inherit;">返回计算器</a>
 </div>

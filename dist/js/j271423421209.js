@@ -15,14 +15,18 @@ let showCurrent = true;
 function toggleCurrentTime() {
     showCurrent = !showCurrent;
     let toggleCurrentText = document.getElementById("toggleCurrentText");
+    let currentTimeElement = document.getElementById("currentTime"); // Get the currentTime element
+
     if (showCurrent) {
         toggleCurrentText.textContent = "关闭当前时间";
         toggleCurrentText.classList.remove("green-text");
         toggleCurrentText.classList.add("gray-text");
+        currentTimeElement.style.visibility = "visible";
     } else {
         toggleCurrentText.textContent = "显示当前时间";
         toggleCurrentText.classList.remove("gray-text");
         toggleCurrentText.classList.add("green-text");
+        currentTimeElement.style.visibility = "hidden";
     }
     draw(schedule);
 }
@@ -171,17 +175,21 @@ function draw(schedule) {
                     }
                 });
             currentTimeDot.attr("cx", x).attr("cy", y);
+
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const formattedDateTime = `${year}-${month}-${day} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById("currentTime").textContent = formattedDateTime;
+
         }
 
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const formattedDateTime = `${year}-${month}-${day} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        document.getElementById("currentTime").textContent = formattedDateTime;
     }
 
-    setInterval(updateCurrentTime, 1000);
-    updateCurrentTime();
+    if (showCurrent) {
+        setInterval(updateCurrentTime, 1000);
+        updateCurrentTime();
+    }
 }
 
 function calculateTotalDuration() {
