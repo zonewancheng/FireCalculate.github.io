@@ -39,8 +39,8 @@ function floatToTimeString(floatTime) {
 function draw(schedule) {
     //console.log(schedule)
     d3.select("#clock").selectAll("*").remove();
-    const width = 500;
-    const height = 500;
+    const width = 800;
+    const height = 800;
     const radius = Math.min(width, height) / 2;
     const centerX = width / 2;
     const centerY = height / 2;
