@@ -1,23 +1,31 @@
-// const schedule = [
-//     {start: 10.5, end: 12, name: '做饭、吃饭'},
-//     {start: 12, end: 14, name: '看电影刷视频'},
-//     {start: 14, end: 15, name: '健身'},
-//     {start: 15, end: 16, name: '逛街出去玩'},
-//     {start: 16, end: 18, name: '做饭、吃饭'},
-//     {start: 18, end: 20, name: '学习'},
-//     {start: 20, end: 22, name: '创作'},
-//     {start: 22, end: 23.5, name: '洗澡'},
-//     {start: 23.5, end: 10.5 + 24, name: '睡觉'}
-// ];
-
 const schedule = [
-    {start: 10.5, end: 12, name: '吃饭'},
-    {start: 12, end: 16.5, name: '玩手机'},
-    {start: 16.5, end: 18, name: '吃饭'},
-    {start: 18, end: 22, name: '玩手机'},
-    {start: 22, end: 23.5, name: '洗澡'},
-    {start: 23.5, end: 10.5 + 24, name: '睡觉'}
+    {start: 10.5, end: 12, name: '做饭、吃饭🍚'},
+    {start: 12, end: 14, name: '逛街、玩🏞️'},
+    {start: 14, end: 15, name: '玩手机📱'},
+    {start: 15, end: 16.5, name: '健身💪'},
+    {start: 16.5, end: 18, name: '做饭、吃饭🍚'},
+    {start: 18, end: 20, name: '学习📚'},
+    {start: 20, end: 22, name: '创作💰'},
+    {start: 22, end: 23.5, name: '洗澡🚿'},
+    {start: 23.5, end: 10.5 + 24, name: '睡觉🛏️'}
 ];
+
+let showCurrent = true;
+
+function toggleCurrentTime() {
+    showCurrent = !showCurrent;
+    let toggleCurrentText = document.getElementById("toggleCurrentText");
+    if (showCurrent) {
+        toggleCurrentText.textContent = "关闭当前时间";
+        toggleCurrentText.classList.remove("green-text");
+        toggleCurrentText.classList.add("gray-text");
+    } else {
+        toggleCurrentText.textContent = "显示当前时间";
+        toggleCurrentText.classList.remove("gray-text");
+        toggleCurrentText.classList.add("green-text");
+    }
+    draw(schedule);
+}
 
 function timeStringToFloat(timeString) {
     const parts = timeString.toString().split(':');
@@ -124,7 +132,7 @@ function draw(schedule) {
         .attr("transform", d => {
             const startAngle = clockScale(d.start) - Math.PI / 2;
             const endAngle = clockScale(d.end) - Math.PI / 2;
-            const labelRadius = (radius - 50) / 1;
+            const labelRadius = (radius - 50) / 1.1;
             const labelAngle = (startAngle + endAngle) / 2;
             const x = centerX + Math.cos(labelAngle) * labelRadius;
             const y = centerY + Math.sin(labelAngle) * labelRadius;
@@ -135,32 +143,34 @@ function draw(schedule) {
         .text(d => d.name);
 
 
-    const currentTimeDot = svg.append("circle")
-        .attr("class", "current-time-dot")
-        .attr("r", 5)
-        .attr("fill", "red");
-
     function updateCurrentTime() {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();
-        const totalMinutes = hours * 60 + minutes + seconds / 60;
-        const currentAngle = clockScale(totalMinutes / 60) - Math.PI / 2;
-        const x = centerX + Math.cos(currentAngle) * (radius - 30);
-        const y = centerY + Math.sin(currentAngle) * (radius - 30);
-        svg.selectAll(".schedule-arc")
-            .attr("fill", function (d) {
-                //console.log("totalMinutes==" + totalMinutes + ",d.start==" + d.start * 60 + ",d.end==" + d.end * 60)
-                if (totalMinutes >= d.start * 60 && totalMinutes <= d.end * 60) {
-                    return "rgba(44, 160, 44, 0.3)";
-                } else if (totalMinutes + 1440 >= d.start * 60 && totalMinutes + 1440 <= d.end * 60) {
-                    return "rgba(44, 160, 44, 0.3)";
-                } else {
-                    return "rgb(245,245,245,0.5)";
-                }
-            });
-        currentTimeDot.attr("cx", x).attr("cy", y);
+
+        if (showCurrent) {
+            const currentTimeDot = svg.append("circle")
+                .attr("class", "current-time-dot")
+                .attr("r", 5)
+                .attr("fill", "red");
+
+            const totalMinutes = hours * 60 + minutes + seconds / 60;
+            const currentAngle = clockScale(totalMinutes / 60) - Math.PI / 2;
+            const x = centerX + Math.cos(currentAngle) * (radius - 30);
+            const y = centerY + Math.sin(currentAngle) * (radius - 30);
+            svg.selectAll(".schedule-arc")
+                .attr("fill", function (d) {
+                    if ((totalMinutes >= d.start * 60 && totalMinutes <= d.end * 60) ||
+                        (totalMinutes + 1440 >= d.start * 60 && totalMinutes + 1440 <= d.end * 60)
+                    ) {
+                        return "rgba(44, 160, 44, 0.3)";
+                    } else {
+                        return "rgb(245,245,245,0.5)";
+                    }
+                });
+            currentTimeDot.attr("cx", x).attr("cy", y);
+        }
 
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');

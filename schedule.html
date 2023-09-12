@@ -16,12 +16,24 @@
         .hide-button {
             visibility: hidden;
         }
+
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
             background-image: none;
             background-position: right center;
+        }
+        #toggleCurrentText {
+            font-size: smaller;
+            float: right;
+            cursor: pointer;
+        }
+        .green-text{
+            ;color: rgba(44, 160, 44);
+        }
+        .gray-text{
+            color: gray
         }
     </style>
 </head>
@@ -33,7 +45,7 @@
         <svg id="clock"></svg>
     </div>
     <div class="center-text">
-        <h2>FIRE的生活时钟</h2>
+        <span id="toggleCurrentText" onclick="toggleCurrentTime()">关闭当前时间</span>
     </div>
     <table class="table table-hover table-bordered text-center">
         <thead>
@@ -42,7 +54,7 @@
             <th class="text-center align-top">开始</th>
             <th class="text-center align-top">结束</th>
             <th class="text-center align-top" id="totalDuration">时长</th>
-            <th class="text-center align-top">日程</th>
+            <th class="text-center align-top">日程(<a href="https://emojixd.com" class="text-decoration-none" target="_blank" style="color: inherit;">emoji</a>)</th>
             <th class="text-center align-top">操作</th>
         </tr>
         </thead>
@@ -50,14 +62,16 @@
         </tbody>
     </table>
 </div>
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between align-items-center">
+    <span id="currentTime" class="mx-auto"></span>
+</div>
+<div>
     <a href="../" class="text-decoration-none" style="color: inherit;">返回计算器</a>
-    <span id="currentTime"></span>
 </div>
 <script src="dist/js/jquery-3.7.0.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 <script src="dist/js/d3js.org_d3.v7.min.js"></script>
-<script src="dist/js/j571023581209.js"></script>
+<script src="dist/js/j421323191209.js"></script>
 <script>
     $(document).ready(function () {
         renderSchedule();
