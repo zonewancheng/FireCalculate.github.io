@@ -31,8 +31,8 @@ function floatToTimeString(floatTime) {
     floatTime = floatTime % 24;
     const hours = Math.floor(floatTime);
     const minutes = Math.round((floatTime - hours) * 60);
-    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
     return `${formattedHours}:${formattedMinutes}`;
 }
 
@@ -181,6 +181,17 @@ function calculateTotalDuration() {
     return totalDuration.toFixed(2);
 }
 
+function generateTimeOptions(selectedTime) {
+    let options = '';
+    for (let hours = 0; hours < 24; hours++) {
+        for (let minutes = 0; minutes < 60; minutes += 30) {
+            const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            options += `<option value="${time}" ${selectedTime === time ? 'selected' : ''}>${time}</option>`;
+        }
+    }
+    return options;
+}
+
 function renderSchedule() {
     console.log("render")
     const scheduleTable = $("#scheduleTable");
@@ -195,8 +206,10 @@ function renderSchedule() {
                             <div class="input-group">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', -30)">‹</button>
-                                </div>                            
-                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.start)}" onchange="updateSchedule(${index}, 'start', this.value)">
+                                </div>
+                                    <select class="form-control" onchange="updateSchedule(${index}, 'start', this.value)">
+                                        ${generateTimeOptions(floatToTimeString(schedule[index].start))}
+                                    </select>                                
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'start', 30)">›</button>
                                 </div>
@@ -207,7 +220,9 @@ function renderSchedule() {
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', -30)">‹</button>
                                 </div>                            
-                                <input type="text" disabled class="form-control" value="${floatToTimeString(item.end)}" onchange="updateSchedule(${index}, 'end', this.value)">
+                                    <select class="form-control" onchange="updateSchedule(${index}, 'end', this.value)">
+                                        ${generateTimeOptions(floatToTimeString(schedule[index].end))}
+                                    </select>                                
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" onclick="adjustTime(${index}, 'end', 30)">›</button>
                                 </div>
@@ -261,21 +276,6 @@ function moveRowDown(index) {
     }
 }
 
-function updateSchedule(index, field, value) {
-    if (field === 'start' || field === 'end') {
-        let newTime = timeStringToFloat(value);
-        schedule[index][field] = newTime;
-        if (schedule[index].start > schedule[index].end) {
-            schedule[index].end += 24;
-        }
-        renderSchedule();
-    } else if (field === 'name') {
-        schedule[index][field] = value.toString().trim();
-        renderSchedule();
-    }
-    const editButton = document.querySelector(`#editButton-${index}`);
-    editButton.classList.add("hide-button");
-}
 
 function handleOverlapping(index) {
     console.log("index==" + index)
@@ -307,6 +307,31 @@ function handleOverlapping(index) {
     });
 }
 
+function handleAndRender(index) {
+    if (schedule[index].start > schedule[index].end) {
+        schedule[index].end += 24;
+    }
+    if (schedule[index].end - schedule[index].start >= 24) {
+        schedule[index].end = schedule[index].end % 24;
+        schedule[index].start = schedule[index].start % 24;
+    }
+    handleOverlapping(index);
+    renderSchedule();
+}
+
+function updateSchedule(index, field, value) {
+    if (field === 'start' || field === 'end') {
+        let newTime = timeStringToFloat(value);
+        schedule[index][field] = newTime;
+        handleAndRender(index);
+    } else if (field === 'name') {
+        schedule[index][field] = value.toString().trim();
+        renderSchedule();
+    }
+    const editButton = document.querySelector(`#editButton-${index}`);
+    editButton.classList.add("hide-button");
+}
+
 function adjustTime(index, field, minutes) {
     const timeInput = field === 'start' ? schedule[index].start : schedule[index].end;
     let adjustedTime = timeInput + minutes / 60;
@@ -318,15 +343,7 @@ function adjustTime(index, field, minutes) {
     } else {
         schedule[index].end = adjustedTime;
     }
-    if (schedule[index].start > schedule[index].end) {
-        schedule[index].end += 24;
-    }
-    if (schedule[index].end - schedule[index].start >= 24) {
-        schedule[index].end = schedule[index].end % 24;
-        schedule[index].start = schedule[index].start % 24;
-    }
-    handleOverlapping(index);
-    renderSchedule();
+    handleAndRender(index);
 }
 
 function deleteRow(index) {
