@@ -39,8 +39,8 @@ function floatToTimeString(floatTime) {
 function draw(schedule) {
     //console.log(schedule)
     d3.select("#clock").selectAll("*").remove();
-    const width = 800;
-    const height = 800;
+    const width = 540;
+    const height = 540;
     const radius = Math.min(width, height) / 2;
     const centerX = width / 2;
     const centerY = height / 2;
@@ -131,7 +131,7 @@ function draw(schedule) {
             return `translate(${x},${y})`;
         })
         .attr("text-anchor", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "1rem")
         .text(d => d.name);
 
 
