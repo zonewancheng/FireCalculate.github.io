@@ -162,8 +162,8 @@ function draw(schedule) {
             const y = centerY + Math.sin(currentAngle) * (radius - 30);
             svg.selectAll(".schedule-arc")
                 .attr("fill", function (d) {
-                    if ((totalMinutes >= d.start * 60 && totalMinutes <= d.end * 60) ||
-                        (totalMinutes + 1440 >= d.start * 60 && totalMinutes + 1440 <= d.end * 60)
+                    if ((totalMinutes >= d.start * 60 && totalMinutes < d.end * 60) ||
+                        (totalMinutes + 1440 >= d.start * 60 && totalMinutes + 1440 < d.end * 60)
                     ) {
                         return "rgba(44, 160, 44, 0.3)";
                     } else {
