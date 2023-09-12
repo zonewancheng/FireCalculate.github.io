@@ -5,7 +5,7 @@ const schedule = [
     {start: 15, end: 16.5, name: '健身💪'},
     {start: 16.5, end: 18, name: '做饭🍚'},
     {start: 18, end: 20, name: '学习📚'},
-    {start: 20, end: 23, name: '赚钱💰'},
+    {start: 20, end: 23, name: '创作💰'},
     {start: 23, end: 23.5, name: '洗澡🚿'},
     {start: 23.5, end: 10.5 + 24, name: '睡觉🛏️'}
 ];
@@ -150,6 +150,7 @@ function draw(schedule) {
         const seconds = now.getSeconds();
 
         if (showCurrent) {
+            svg.selectAll(".current-time-dot").remove();
             const currentTimeDot = svg.append("circle")
                 .attr("class", "current-time-dot")
                 .attr("r", 5)
@@ -203,7 +204,7 @@ function generateTimeOptions(selectedTime) {
 }
 
 function renderSchedule() {
-    console.log("render")
+    //console.log("render")
     const scheduleTable = $("#scheduleTable");
     scheduleTable.empty();
     schedule.forEach((item, index) => {
