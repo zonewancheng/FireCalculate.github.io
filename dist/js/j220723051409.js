@@ -304,8 +304,8 @@ function moveRowDown(index) {
 
 
 function handleOverlapping(index) {
-    console.log("index==" + index)
-    console.log(schedule)
+    // console.log("index==" + index)
+    // console.log(schedule)
     const overlappingRows = [];
     schedule.forEach((item, i) => {
         if (i !== index) {
