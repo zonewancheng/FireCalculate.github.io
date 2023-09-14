@@ -443,6 +443,10 @@ function updateTextareaRows() {
     let number = Math.max(text.split('\n').length + 1, 5);
     //console.log(number);
     scheduleTextElement.rows = number;
+    if (text.length > 0) {
+        document.getElementById("copyButton").style.visibility = "visible";
+        document.getElementById("parseButton").style.visibility = "visible";
+    }
 }
 
 function updateScheduleText() {
