@@ -459,6 +459,9 @@ function copyToClipboard() {
     let textarea = document.getElementById("scheduleText");
     textarea.select();
     document.execCommand("copy");
+    textarea.select();
+    document.execCommand("copy");
+    document.getElementById("copyButton").focus();
     new bootstrap.Toast(document.getElementById('copyToast')).show();
 }
 
