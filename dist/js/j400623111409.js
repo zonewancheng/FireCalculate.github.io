@@ -395,7 +395,7 @@ function onInputChange(index) {
 }
 
 function parseScheduleText() {
-    const text = document.getElementById("scheduleText").value;
+    const text = document.getElementById("scheduleText").value.trim();
     if (text.length == 0) {
         alert("empty!");
     } else {
@@ -434,6 +434,14 @@ function parseScheduleText() {
     new bootstrap.Toast(document.getElementById('parseToast')).show();
 }
 
+function updateTextareaRows() {
+    let scheduleTextElement = document.getElementById("scheduleText");
+    const text = scheduleTextElement.value.trim();
+    let number = Math.max(text.split('\n').length + 1, 5);
+    //console.log(number);
+    scheduleTextElement.rows = number;
+}
+
 function updateScheduleText() {
     const text = schedule.map(item => {
         const start = floatToTimeString(item.start);
@@ -441,6 +449,7 @@ function updateScheduleText() {
         return `${start}#${end}#${item.name}`;
     }).join('\n');
     document.getElementById("scheduleText").value = text;
+    updateTextareaRows();
 }
 
 function copyToClipboard() {
@@ -453,4 +462,5 @@ function copyToClipboard() {
 function clearScheduleText() {
     document.getElementById("scheduleText").value = "";
     new bootstrap.Toast(document.getElementById('clearToast')).show();
+
 }
