@@ -467,6 +467,8 @@ function copyToClipboard() {
 
 function clearScheduleText() {
     document.getElementById("scheduleText").value = "";
+    document.getElementById("copyButton").style.visibility = "hidden";
+    document.getElementById("parseButton").style.visibility = "hidden";
     new bootstrap.Toast(document.getElementById('clearToast')).show();
 
 }

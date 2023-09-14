@@ -46,7 +46,7 @@
         }
 
         #scheduleText {
-            font-size: 60%;
+            font-size: 90%;
             color: gray;
         }
     </style>
@@ -95,7 +95,7 @@
         </div>
         <div class="d-flex justify-content-between align-items-center">
             <button id="copyButton" class="btn btn-outline-secondary rounded-circle" onclick="copyToClipboard()">复制📄</button>
-            <button class="btn btn-outline-secondary rounded-circle" onclick="parseScheduleText()">解析📊</button>
+            <button id="parseButton" class="btn btn-outline-secondary rounded-circle" onclick="parseScheduleText()">解析📊</button>
             <button class="btn btn-outline-secondary rounded-circle" onclick="clearScheduleText()">清空🗑️</button>
         </div>
         <div class="toast" id="copyToast" data-delay="100"
@@ -123,7 +123,7 @@
 <script src="dist/js/jquery-3.7.0.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 <script src="dist/js/d3js.org_d3.v7.min.js"></script>
-<script src="dist/js/j570723211409.js"></script>
+<script src="dist/js/j290823541409.js"></script>
 <script>
     $(document).ready(function () {
         renderSchedule();
