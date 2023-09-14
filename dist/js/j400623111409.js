@@ -374,6 +374,9 @@ function adjustTime(index, field, minutes) {
 }
 
 function deleteRow(index) {
+    if (schedule.length == 1) {
+        return;
+    }
     schedule.splice(index, 1);
     renderSchedule();
 }
