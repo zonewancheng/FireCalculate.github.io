@@ -24,12 +24,6 @@
             background-image: none;
             background-position: right center;
         }
-
-        #toggleCurrentText {
-            font-size: 90%;
-            cursor: pointer;
-        }
-
         .green-text {;
             color: rgb(44, 160, 44);
         }
@@ -67,8 +61,8 @@
         <svg id="clock"></svg>
     </div>
     <div class="center-text">
-        <span id="toggleCurrentText" onclick="toggleCurrentTime()">关闭当前时间</span>
-        <a href="../" class="text-decoration-none d-flex justify-content-end" style="color: inherit;font-size: 90%;">返回计算器</a>
+        <span id="toggleCurrentText" onclick="toggleCurrentTime()" style="font-size: 90%;cursor: pointer;">关闭当前时间</span>
+        <span><a href="../" class="text-decoration-none" style="color: inherit;font-size: 90%;float: right;color: gray;">返回计算器</a></span>
     </div>
 
     <table class="table table-hover table-bordered text-center">
