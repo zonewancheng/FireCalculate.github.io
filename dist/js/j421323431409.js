@@ -476,4 +476,8 @@ function clearScheduleText() {
     document.getElementById("scheduleText").value = "";
     new bootstrap.Toast(document.getElementById('clearToast')).show();
     updateTextareaRows();
+
+    schedule.splice(1);
+    renderSchedule();
+    updateScheduleText();
 }
