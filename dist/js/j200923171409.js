@@ -446,6 +446,9 @@ function updateTextareaRows() {
     if (text.length > 0) {
         document.getElementById("copyButton").style.visibility = "visible";
         document.getElementById("parseButton").style.visibility = "visible";
+    }else{
+        document.getElementById("copyButton").style.visibility = "hidden";
+        document.getElementById("parseButton").style.visibility = "hidden";
     }
 }
 
@@ -471,8 +474,6 @@ function copyToClipboard() {
 
 function clearScheduleText() {
     document.getElementById("scheduleText").value = "";
-    document.getElementById("copyButton").style.visibility = "hidden";
-    document.getElementById("parseButton").style.visibility = "hidden";
     new bootstrap.Toast(document.getElementById('clearToast')).show();
-
+    updateTextareaRows();
 }
