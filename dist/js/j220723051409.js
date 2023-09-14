@@ -172,7 +172,7 @@ function draw(schedule) {
                     ) {
                         return "rgba(44, 160, 44, 0.3)";
                     } else {
-                        return "rgb(245,245,245,0.5)";
+                        return "rgb(255,255,255,0.5)";
                     }
                 });
             currentTimeDot.attr("cx", x).attr("cy", y);
@@ -406,9 +406,9 @@ function parseScheduleText() {
         for (const line of lines) {
             const cleanedText = line.replace(/\s/g, "").trim();
             if (cleanedText.length > 0) {
-                const pattern = /^(\d{1,2}:\d{1,2}#\d{1,2}:\d{1,2}#[\s\S]*\n*)+$/;
+                const pattern = /^(0[0-9]|1[0-9]|2[0-3]):(00|30)#(0[0-9]|1[0-9]|2[0-3]):(00|30)#[\s\S]*$/;
                 if (!pattern.test(cleanedText)) {
-                    alert("格式不正确：（时:分#时:分#日程）\n错误：" + cleanedText);
+                    alert("格式不正确:(00~23)时:(00/30)分#(00~23)时:(00/30)分#日程\n错误:" + cleanedText);
                     return;
                 }
             }
