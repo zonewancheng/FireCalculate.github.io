@@ -41,6 +41,10 @@
         a.text-decoration-none.hover-color-change:hover {
             color: #FF00FF !important;
         }
+        .rounded-btn {
+            border-radius: 50%;
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
@@ -71,6 +75,32 @@
         </tbody>
     </table>
 </div>
+<div class="row position-relative">
+    <div class="col-md-10">
+        <textarea id="scheduleText" class="form-control" rows="5" cols="50" placeholder="粘贴你的字符串文本块"></textarea>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-outline-secondary btn-block mt-2 rounded-btn" onclick="copyToClipboard()">复制元数据</button>
+        <button class="btn btn-outline-secondary btn-block mt-2 rounded-btn" onclick="parseScheduleText()">解析到时钟</button>
+        <button class="btn btn-outline-secondary btn-block mt-2 rounded-btn" onclick="clearScheduleText()">清空</button>
+        <div class="toast" id="copyToast" data-delay="100" style="position: absolute; top: 100%; right: 0;">
+            <div class="toast-body bg-secondary text-white">
+                已复制
+            </div>
+        </div>
+        <div class="toast" id="parseToast" data-delay="100" style="position: absolute; top: 100%; right: 0;">
+            <div class="toast-body bg-secondary text-white">
+                已解析
+            </div>
+        </div>
+        <div class="toast" id="clearToast" data-delay="100" style="position: absolute; top: 100%; right: 0;">
+            <div class="toast-body bg-secondary text-white">
+                已清空
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div>
     <a href="../" class="text-decoration-none" style="color: inherit;">返回计算器</a>
@@ -78,7 +108,7 @@
 <script src="dist/js/jquery-3.7.0.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 <script src="dist/js/d3js.org_d3.v7.min.js"></script>
-<script src="dist/js/j160423441309.js"></script>
+<script src="dist/js/j250423591409.js"></script>
 <script>
     $(document).ready(function () {
         renderSchedule();

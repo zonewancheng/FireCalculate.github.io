@@ -1,4 +1,4 @@
-const schedule = [
+let schedule = [
     {start: 10.5, end: 12, name: '做饭🍚'},
     {start: 12, end: 14, name: '出去玩🏞️'},
     {start: 14, end: 15, name: '玩手机📱'},
@@ -148,6 +148,7 @@ function draw(schedule) {
 
 
     function updateCurrentTime() {
+        //console.log("updateCurrentTime")
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
@@ -193,10 +194,15 @@ function draw(schedule) {
 }
 
 function calculateTotalDuration() {
+    //console.log(schedule)
     let totalDuration = 0;
     schedule.forEach(item => {
+        //console.log("item.end=="+item.end)
+        //console.log("item.start=="+item.start)
         totalDuration += item.end - item.start;
+        //console.log(totalDuration)
     });
+    //console.log(totalDuration)
     return totalDuration.toFixed(2);
 }
 
@@ -274,6 +280,7 @@ function renderSchedule() {
     $("#totalDuration").css("color", totalDuration > 24 ? "red" : totalDuration == 24 ? "green" : "");
     $("#totalDuration").text(`时长(${totalDuration}h)`);
     draw(schedule);
+    updateScheduleText();
 }
 
 
@@ -385,4 +392,65 @@ function addRow(index) {
 function onInputChange(index) {
     const editButton = document.querySelector(`#editButton-${index}`);
     editButton.classList.remove("hide-button");
+}
+
+function parseScheduleText() {
+    const text = document.getElementById("scheduleText").value;
+    if (text.length == 0) {
+        alert("empty!");
+    } else {
+        const lines = text.split('\n');
+        for (const line of lines) {
+            const cleanedText = line.replace(/\s/g, "").trim();
+            if (cleanedText.length > 0) {
+                const pattern = /^(\d{1,2}:\d{1,2}#\d{1,2}:\d{1,2}#[\s\S]*\n*)+$/;
+                if (!pattern.test(cleanedText)) {
+                    alert("格式不正确：（时:分#时:分#日程）\n错误：" + cleanedText);
+                    return;
+                }
+            }
+        }
+        schedule = [];
+        for (const line of lines) {
+            const cleanedText = line.replace(/\s/g, "").trim();
+            if (cleanedText.length > 0) {
+                const parts = cleanedText.split('#');
+                if (parts.length === 3) {
+                    //console.log("parts==" + parts)
+                    let start = timeStringToFloat(parts[0]);
+                    let end = timeStringToFloat(parts[1]);
+                    if (start > end) {
+                        end += 24;
+                    }
+                    //console.log("startTime==" + start+",endTime==" + end)
+                    const name = parts[2].trim();
+                    schedule.push({start, end, name});
+                }
+            }
+        }
+    }
+    renderSchedule();
+    updateScheduleText();
+    new bootstrap.Toast(document.getElementById('parseToast')).show();
+}
+
+function updateScheduleText() {
+    const text = schedule.map(item => {
+        const start = floatToTimeString(item.start);
+        const end = floatToTimeString(item.end);
+        return `${start}#${end}#${item.name}`;
+    }).join('\n');
+    document.getElementById("scheduleText").value = text;
+}
+
+function copyToClipboard() {
+    let textarea = document.getElementById("scheduleText");
+    textarea.select();
+    document.execCommand("copy");
+    new bootstrap.Toast(document.getElementById('copyToast')).show();
+}
+
+function clearScheduleText() {
+    document.getElementById("scheduleText").value = "";
+    new bootstrap.Toast(document.getElementById('clearToast')).show();
 }
