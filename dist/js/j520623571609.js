@@ -219,6 +219,7 @@ function generateTimeOptions(selectedTime) {
 
 function renderSchedule() {
     //console.log("render")
+    handleOverlapping();
     const scheduleTable = $("#scheduleTable");
     scheduleTable.empty();
     schedule.forEach((item, index) => {
@@ -303,35 +304,37 @@ function moveRowDown(index) {
 }
 
 
-function handleOverlapping(index) {
-    // console.log("index==" + index)
-    // console.log(schedule)
+function handleOverlapping() {
+    //console.log(schedule)
     const overlappingRows = [];
-    schedule.forEach((item, i) => {
-        if (i !== index) {
-            let start = schedule[index].start;
-            let end = schedule[index].end;
-            if (start == end) {
-            } else if (
-                (start < item.end && end > item.start) ||
-                (start + 24 < item.end && end + 24 > item.start) ||
-                (start - 24 < item.end && end - 24 > item.start)
-            ) {
-                overlappingRows.push(i);
-                if (!overlappingRows.includes(index)) {
-                    overlappingRows.push(index);
+    for (let index = 0; index < schedule.length; index++) {
+        schedule.forEach((item, i) => {
+            if (i !== index) {
+                let start = schedule[index].start;
+                let end = schedule[index].end;
+                if (start == end) {
+                } else if (
+                    (start < item.end && end > item.start) ||
+                    (start + 24 < item.end && end + 24 > item.start) ||
+                    (start - 24 < item.end && end - 24 > item.start)
+                ) {
+                    overlappingRows.push(i);
+                    if (!overlappingRows.includes(index)) {
+                        overlappingRows.push(index);
+                    }
                 }
             }
-        }
-    });
-    overlappingRows.forEach((rowIndex) => {
-        schedule[rowIndex].isOverlap = true;
-    });
-    schedule.forEach((item, i) => {
-        if (!overlappingRows.includes(i)) {
-            schedule[i].isOverlap = false;
-        }
-    });
+        });
+        overlappingRows.forEach((rowIndex) => {
+            schedule[rowIndex].isOverlap = true;
+        });
+        schedule.forEach((item, i) => {
+            if (!overlappingRows.includes(i)) {
+                schedule[i].isOverlap = false;
+            }
+        });
+    }
+    //console.log(schedule)
 }
 
 function handleAndRender(index) {
@@ -342,7 +345,6 @@ function handleAndRender(index) {
         schedule[index].end = schedule[index].end % 24;
         schedule[index].start = schedule[index].start % 24;
     }
-    handleOverlapping(index);
     renderSchedule();
 }
 
@@ -384,7 +386,6 @@ function deleteRow(index) {
 function addRow(index) {
     if (schedule.length < 20) {
         schedule.splice(index, 0, {start: 0, end: 0, name: ''});
-        handleOverlapping(index);
         renderSchedule();
     } else {
         alert("最多20行~");
@@ -403,12 +404,15 @@ function parseScheduleText() {
         alert("empty!");
     } else {
         const lines = text.split('\n');
+        if (lines.length > 20) {
+            alert("最多20行~");
+        }
         for (const line of lines) {
             const cleanedText = line.replace(/\s/g, "").trim();
             if (cleanedText.length > 0) {
                 const pattern = /^(0[0-9]|1[0-9]|2[0-3]):(00|30)#(0[0-9]|1[0-9]|2[0-3]):(00|30)#[\s\S]*$/;
                 if (!pattern.test(cleanedText)) {
-                    alert("格式不正确:(00~23)时:(00/30)分#(00~23)时:(00/30)分#日程\n错误:" + cleanedText);
+                    alert("格式错误：" + cleanedText + "\n" + "(00~23)时:(00/30)分#(00~23)时:(00/30)分#日程");
                     return;
                 }
             }
@@ -446,7 +450,7 @@ function updateTextareaRows() {
     if (text.length > 0) {
         document.getElementById("copyButton").style.visibility = "visible";
         document.getElementById("parseButton").style.visibility = "visible";
-    }else{
+    } else {
         document.getElementById("copyButton").style.visibility = "hidden";
         document.getElementById("parseButton").style.visibility = "hidden";
     }
