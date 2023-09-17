@@ -20,11 +20,9 @@ function toggleCurrentTime() {
     if (showCurrent) {
         toggleCurrentText.textContent = "关闭当前时间";
         toggleCurrentText.classList.remove("green-text");
-        toggleCurrentText.classList.add("gray-text");
         currentTimeElement.style.visibility = "visible";
     } else {
         toggleCurrentText.textContent = "显示当前时间";
-        toggleCurrentText.classList.remove("gray-text");
         toggleCurrentText.classList.add("green-text");
         currentTimeElement.style.visibility = "hidden";
     }
