@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+    <link rel="icon" href="dist/favicon.ico"/>
+    <title>-</title>
+    <link rel="stylesheet" href="dist/css/bootstrap.min.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .hobby-label {
+            flex-basis: 40%;
+        }
+
+        .stars {
+            flex-basis: 60%;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #dcdada;
+            margin-right: 5px;
+        }
+
+        .star:hover {
+            color: #ffc0cb;
+        }
+
+
+        .star.clicked {
+            color: #FF0000;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 4px;
+        }
+
+        .reset-rating {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4" style="margin-top: 0;">My Hobbies</h1>
+    <canvas id="hobbyWeightsChart"></canvas>
+    <table class="table table-bordered mt-4">
+        <thead class="thead-dark">
+        <tr>
+            <th style="vertical-align: top;"></th>
+            <th style="vertical-align: top;">名称</th>
+            <th style="vertical-align: top;">解释</th>
+            <th style="vertical-align: top;">爱好指数</th>
+            <th style="vertical-align: top;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Hobbies will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-2">
+            <input type="text" id="new-hobby" class="form-control" placeholder="">
+        </div>
+        <div class="col-md-9">
+            <input type="text" id="new-description" class="form-control" placeholder="">
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary btn-block" onclick="addNewHobby()">添加</button>
+        </div>
+    </div>
+    <br><br>
+</div>
+<script src="dist/js/jquery-3.7.0.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script src="dist/chart.min.js"></script>
+<script>
+
+    // Initialize an empty data array for the chart
+    let chartData = {
+        labels: [],     // Hobbies
+        datasets: [
+            {
+                data: [],   // Hobby Weight values
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                ],
+            },
+        ],
+    };
+
+    // Create or update the chart
+    const updateChart = () => {
+        const hobbyWeights = [];
+        const hobbyLabels = [];
+
+        const stars = document.querySelectorAll('.star-rating');
+        stars.forEach((star, index) => {
+            const ratingDisplay = star.querySelector('.rating-value');
+            const hobbyName = document.querySelectorAll('.hobby-label')[index].textContent;
+            const hobbyWeight = parseInt(ratingDisplay.textContent, 10);
+            hobbyWeights.push(hobbyWeight);
+            hobbyLabels.push(hobbyName);
+        });
+
+        chartData.labels = hobbyLabels;
+        chartData.datasets[0].data = hobbyWeights;
+
+        // Get the chart canvas element
+        const chartCanvas = document.getElementById('hobbyWeightsChart').getContext('2d');
+
+        // Create or update the chart
+        if (window.myHobbyWeightsChart) {
+            window.myHobbyWeightsChart.data = chartData;
+            window.myHobbyWeightsChart.update();
+        } else {
+            window.myHobbyWeightsChart = new Chart(chartCanvas, {
+                type: 'polarArea', // 使用'polarArea'图表类型
+                data: chartData,
+            });
+
+        }
+    };
+
+    // Add an event listener to each star for real-time updates
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((star) => {
+        star.addEventListener('click', function () {
+            rateHobby(this, parseInt(this.textContent, 10));
+            updateChart();
+        });
+    });
+
+
+    function rateHobby(star, rating) {
+        const stars = star.parentElement.querySelectorAll('.star');
+        const ratingDisplay = star.parentElement.querySelector('.rating-value');
+        const resetRating = star.parentElement.querySelector('.reset-rating');
+
+        stars.forEach((s, index) => {
+            if (index < rating) {
+                s.classList.add('clicked');
+            } else {
+                s.classList.remove('clicked');
+            }
+        });
+
+        ratingDisplay.textContent = rating; // Update the displayed rating
+        if (rating > 0) {
+            resetRating.style.visibility = 'visible';
+        } else {
+            resetRating.style.visibility = 'hidden';
+        }
+        updateChart();
+
+    }
+
+    function resetHobby(resetButton) {
+        resetButton.style.visibility = 'hidden';
+        const starRating = resetButton.parentElement;
+        const ratingValue = starRating.querySelector('.rating-value');
+        ratingValue.textContent = '0';
+
+        const stars = starRating.querySelectorAll('.star');
+        stars.forEach((star) => star.classList.remove('clicked'));
+
+        updateChart();
+    }
+
+    function createStarIcons() {
+        let starsHtml = "";
+        for (let i = 1; i <= 10; i++) {
+            starsHtml += `<span class="star" onclick="rateHobby(this, ${i})">&#9733;</span>`;
+        }
+        return `<div class="star-rating" style="display: flex; align-items: center;">
+        ${starsHtml} <span class="rating-value" style="color: #dcdada; flex-basis: 60%;">0</span>
+        <span class="reset-rating star" onclick="resetHobby(this)">×</span>
+    </div>`;
+    }
+
+
+    function addNewHobby() {
+        const hobbyName = document.getElementById("new-hobby").value;
+        const hobbyDescription = document.getElementById("new-description").value;
+
+        if (hobbyName && hobbyDescription) {
+            const table = document.querySelector("table tbody");
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${table.rows.length + 1}</td>
+                <td class="hobby-label">${hobbyName}</td>
+                <td style="color: #454545; font-size: 85%;">${hobbyDescription}</td>
+                <td class="stars">${createStarIcons()}</td>
+                <td><button class="btn btn-outline-secondary btn-sm" onclick="deleteHobby(this.parentNode.parentNode)">X</button></td>
+            `;
+            table.appendChild(newRow);
+            // Clear input fields
+            document.getElementById("new-hobby").value = "";
+            document.getElementById("new-description").value = "";
+        }
+    }
+
+    // List of hobbies and descriptions
+    const hobbies = [
+        {name: "阅读", description: "阅读书籍、杂志、小说、漫画等.", value: 2},
+        {name: "体育运动", description: "包括足球、篮球、网球、高尔夫、跑步、健身等.", value: 5},
+        {name: "音乐", description: "演奏乐器（如吉他、钢琴、小提琴）、唱歌、参加音乐会、收藏唱片.", value: 3},
+        {name: "绘画和艺术", description: "绘画、雕塑、摄影等.", value: 2},
+        {name: "旅行", description: "探索不同的地方，体验不同的文化.", value: 3},
+        {name: "美食和烹饪", description: "尝试新的美食、烹饪家常菜或烘焙甜点.", value: 6},
+        {name: "户外活动", description: "徒步旅行、露营、钓鱼、滑雪、登山等.", value: 2},
+        {name: "电影和电视剧", description: "观看电影、电视剧、追踪最新影片.", value: 9},
+        {name: "手工艺", description: "制作手工艺品、手工制作家具、缝纫等.", value: 1},
+        {name: "园艺", description: "种植花草、养殖植物.", value: 1},
+        {name: "电子游戏", description: "玩电子游戏、在线游戏或手机游戏.", value: 1},
+        {name: "科技", description: "关注最新科技趋势，尝试新的科技产品.", value: 7},
+        {name: "社交媒体", description: "使用社交媒体平台与朋友和家人互动.", value: 1},
+        {name: "书法和手写", description: "练习书法和手写艺术.", value: 1},
+        {name: "音乐会和表演艺术", description: "参加音乐会、话剧、舞蹈表演等.", value: 1},
+        {name: "编程和计算机科学", description: "学习编程、开发应用程序.", value: 9},
+        {name: "收藏", description: "收藏硬币、邮票、动作玩具、纪念品等.", value: 1},
+        {name: "自愿者工作", description: "参与社会和慈善活动，帮助需要帮助的人.", value: 1}
+    ];
+
+
+    function deleteHobby(row) {
+        const table = document.querySelector("table tbody");
+        table.removeChild(row);
+        const rows = table.querySelectorAll("tr");
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    }
+
+
+    const table = document.querySelector("table tbody");
+    hobbies.forEach((hobby, index) => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+                <td>${index + 1}</td>
+                <td class="hobby-label">${hobby.name}</td>
+                <td style="color: #454545; font-size: 85%;">${hobby.description}</td>
+                <td class="stars">${createStarIcons()}</td>
+                <td><button class="btn btn-outline-secondary btn-sm" onclick="deleteHobby(this.parentNode.parentNode)">X</button></td>
+            `;
+        table.appendChild(newRow);
+    });
+
+    function updateInitialHobbyValues() {
+        const starRatingElements = document.querySelectorAll(".star-rating");
+        starRatingElements.forEach((starRating, index) => {
+            const ratingValue = starRating.querySelector(".rating-value");
+            const initialHobbyValue = hobbies[index].value;
+            ratingValue.textContent = initialHobbyValue;
+            const stars = starRating.querySelectorAll(".star");
+            stars.forEach((star, i) => {
+                if (i < initialHobbyValue) {
+                    star.classList.add("clicked");
+                } else {
+                    star.classList.remove("clicked");
+                }
+            });
+        });
+    }
+
+    updateInitialHobbyValues();
+    updateChart();
+</script>
+
+</body>
+</html>
