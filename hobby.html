@@ -88,12 +88,11 @@
 <script src="dist/chart.min.js"></script>
 <script>
 
-    // Initialize an empty data array for the chart
     let chartData = {
-        labels: [],     // Hobbies
+        labels: [],
         datasets: [
             {
-                data: [],   // Hobby Weight values
+                data: [],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.7)',
                     'rgba(54, 162, 235, 0.7)',
@@ -101,17 +100,28 @@
                     'rgba(75, 192, 192, 0.7)',
                     'rgba(153, 102, 255, 0.7)',
                     'rgba(255, 159, 64, 0.7)',
+                    'rgba(0, 128, 0, 0.7)',
+                    'rgba(128, 0, 0, 0.7)',
+                    'rgba(0, 0, 128, 0.7)',
+                    'rgba(128, 128, 0, 0.7)',
+                    'rgba(128, 0, 128, 0.7)',
+                    'rgba(0, 128, 128, 0.7)',
+                    'rgba(192, 192, 192, 0.7)',
+                    'rgba(255, 215, 0, 0.7)',
+                    'rgba(0, 255, 255, 0.7)',
+                    'rgba(255, 69, 0, 0.7)',
+                    'rgba(139, 69, 19, 0.7)',
+                    'rgba(0, 128, 128, 0.7)',
+                    'rgba(255, 99, 71, 0.7)',
+                    'rgba(75, 0, 130, 0.7)',
                 ],
             },
         ],
     };
 
 
-    // Create or update the chart
     const updateChart = () => {
-
         console.log("chart")
-
         const hobbyWeights = [];
         const hobbyLabels = [];
 
@@ -123,22 +133,16 @@
             hobbyWeights.push(hobbyWeight);
             hobbyLabels.push(hobbyName);
         });
-
         chartData.labels = hobbyLabels;
         chartData.datasets[0].data = hobbyWeights;
 
-        // Get the chart canvas element
         const chartCanvas = document.getElementById('hobbyWeightsChart').getContext('2d');
 
-
-        // Create or update the chart
         if (window.myHobbyWeightsChart) {
             window.myHobbyWeightsChart.data = chartData;
             window.myHobbyWeightsChart.update();
         } else {
             console.log("chart create")
-            console.log(chartData.labels)
-            console.log(chartData.datasets[0].data)
             window.myHobbyWeightsChart = new Chart(chartCanvas, {
                 type: 'polarArea',
                 data: chartData,
@@ -162,11 +166,9 @@
         }
     };
 
-
     function rateHobby(star, rating) {
         const stars = star.parentElement.querySelectorAll('.star');
         const ratingDisplay = star.parentElement.querySelector('.rating-value');
-        const resetRating = star.parentElement.querySelector('.reset-rating');
 
         stars.forEach((s, index) => {
             if (index < rating) {
@@ -176,12 +178,7 @@
             }
         });
 
-        ratingDisplay.textContent = rating; // Update the displayed rating
-        if (rating > 0) {
-            resetRating.style.visibility = 'visible';
-        } else {
-            resetRating.style.visibility = 'hidden';
-        }
+        ratingDisplay.textContent = rating;
         updateChart();
     }
 
@@ -194,7 +191,6 @@
         ${starsHtml} <span class="rating-value" style="color: #dcdada; flex-basis: 60%;">0</span>
     </div>`;
     }
-
 
     function addNewHobby() {
         const hobbyName = document.getElementById("new-hobby").value;
@@ -218,7 +214,16 @@
         updateChart();
     }
 
-    // List of hobbies and descriptions
+    function deleteHobby(row) {
+        const table = document.querySelector("table tbody");
+        table.removeChild(row);
+        const rows = table.querySelectorAll("tr");
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+        updateChart();
+    }
+
     const hobbies = [
         {name: "阅读", description: "阅读书籍、杂志、小说、漫画等.", value: 2},
         {name: "体育运动", description: "包括足球、篮球、网球、高尔夫、跑步、健身等.", value: 5},
@@ -239,18 +244,6 @@
         {name: "收藏", description: "收藏硬币、邮票、动作玩具、纪念品等.", value: 1},
         {name: "自愿者工作", description: "参与社会和慈善活动，帮助需要帮助的人.", value: 1}
     ];
-
-
-    function deleteHobby(row) {
-        const table = document.querySelector("table tbody");
-        table.removeChild(row);
-        const rows = table.querySelectorAll("tr");
-        rows.forEach((row, index) => {
-            row.cells[0].textContent = index + 1;
-        });
-        updateChart();
-    }
-
 
     const table = document.querySelector("table tbody");
     hobbies.forEach((hobby, index) => {
@@ -281,7 +274,6 @@
             });
         });
     }
-
     updateInitialHobbyValues();
     updateChart();
 </script>
