@@ -55,7 +55,8 @@
     </style>
 </head>
 <body>
-<div class="container">
+
+<div class="table-responsive">
     <h1 class="mt-4" style="margin-top: 0;">My Hobbies</h1>
     <canvas id="hobbyWeightsChart"></canvas>
     <table class="table table-bordered mt-4">
@@ -77,11 +78,11 @@
         <div class="col-md-2">
             <input type="text" id="new-hobby" class="form-control" placeholder="">
         </div>
-        <div class="col-md-9">
+        <div class="col-md-7">
             <input type="text" id="new-description" class="form-control" placeholder="">
         </div>
-        <div class="col-md-1">
-            <button class="btn btn-primary btn-block" onclick="addNewHobby()">添加</button>
+        <div class="col-md-2">
+            <button class="btn btn-outline-secondary btn-block" onclick="addNewHobby()">添加</button>
         </div>
     </div>
     <br><br>
@@ -109,8 +110,14 @@
         ],
     };
 
+
+
+
     // Create or update the chart
     const updateChart = () => {
+
+        console.log("chart")
+
         const hobbyWeights = [];
         const hobbyLabels = [];
 
@@ -129,27 +136,30 @@
         // Get the chart canvas element
         const chartCanvas = document.getElementById('hobbyWeightsChart').getContext('2d');
 
+
         // Create or update the chart
         if (window.myHobbyWeightsChart) {
             window.myHobbyWeightsChart.data = chartData;
             window.myHobbyWeightsChart.update();
         } else {
+            console.log("chart create")
+            console.log(chartData.labels)
+            console.log(chartData.datasets[0].data)
             window.myHobbyWeightsChart = new Chart(chartCanvas, {
-                type: 'polarArea', // 使用'polarArea'图表类型
+                type: 'polarArea',
                 data: chartData,
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                    },
+                    borderAlign: 'inner',
+                }
             });
-
         }
     };
-
-    // Add an event listener to each star for real-time updates
-    const stars = document.querySelectorAll('.star');
-    stars.forEach((star) => {
-        star.addEventListener('click', function () {
-            rateHobby(this, parseInt(this.textContent, 10));
-            updateChart();
-        });
-    });
 
 
     function rateHobby(star, rating) {
@@ -172,7 +182,6 @@
             resetRating.style.visibility = 'hidden';
         }
         updateChart();
-
     }
 
     function resetHobby(resetButton) {
@@ -218,6 +227,7 @@
             document.getElementById("new-hobby").value = "";
             document.getElementById("new-description").value = "";
         }
+        updateChart();
     }
 
     // List of hobbies and descriptions
@@ -250,6 +260,7 @@
         rows.forEach((row, index) => {
             row.cells[0].textContent = index + 1;
         });
+        updateChart();
     }
 
 
