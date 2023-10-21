@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
     <link rel="icon" href="dist/favicon.ico"/>
-    <title>-</title>
+    <title>My Hobbies</title>
     <link rel="stylesheet" href="dist/css/bootstrap.min.css">
     <style>
         table {
@@ -53,7 +53,7 @@
 <body>
 
 <div class="table-responsive">
-    <h1 class="mt-4" style="margin-top: 0;">My Hobbies</h1>
+    <!--<h1 class="mt-4" style="margin-top: 0;">My Hobbies</h1>-->
     <canvas id="hobbyWeightsChart"></canvas>
     <table class="table table-bordered mt-4">
         <thead class="thead-dark">
@@ -114,6 +114,26 @@
                     'rgba(0, 128, 128, 0.7)',
                     'rgba(255, 99, 71, 0.7)',
                     'rgba(75, 0, 130, 0.7)',
+                    'rgba(0, 0, 0, 0.7)',
+                    'rgba(255, 0, 255, 0.7)',
+                    'rgba(0, 255, 0, 0.7)',
+                    'rgba(128, 0, 128, 0.7)',
+                    'rgba(0, 128, 0, 0.7)',
+                    'rgba(255, 128, 0, 0.7)',
+                    'rgba(0, 255, 128, 0.7)',
+                    'rgba(128, 255, 0, 0.7)',
+                    'rgba(0, 128, 255, 0.7)',
+                    'rgba(255, 0, 128, 0.7)',
+                    'rgba(128, 0, 255, 0.7)',
+                    'rgba(255, 128, 128, 0.7)',
+                    'rgba(128, 255, 128, 0.7)',
+                    'rgba(128, 128, 255, 0.7)',
+                    'rgba(255, 255, 128, 0.7)',
+                    'rgba(255, 128, 255, 0.7)',
+                    'rgba(128, 255, 255, 0.7)',
+                    'rgba(255, 255, 255, 0.7)',
+                    'rgba(100, 100, 100, 0.7)',
+                    'rgba(200, 200, 200, 0.7)',
                 ],
                 hoverOffset: 4,
             },
@@ -195,18 +215,18 @@
 
     function addNewHobby() {
         const hobbyName = document.getElementById("new-hobby").value;
-        const hobbyDescription = document.getElementById("new-description").value;
+        const hobbyDescription = document.getElementById("new-description").value || '';
 
-        if (hobbyName && hobbyDescription) {
+        if (hobbyName) {
             const table = document.querySelector("table tbody");
             const newRow = document.createElement("tr");
             newRow.innerHTML = `
-                <td>${table.rows.length + 1}</td>
-                <td class="hobby-label">${hobbyName}</td>
-                <td style="color: #454545; font-size: 85%;">${hobbyDescription}</td>
-                <td class="stars">${createStarIcons()}</td>
-                <td><button class="btn btn-outline-secondary btn-sm" onclick="deleteHobby(this.parentNode.parentNode)">X</button></td>
-            `;
+            <td>${table.rows.length + 1}</td>
+            <td class="hobby-label">${hobbyName}</td>
+            <td style="color: #454545; font-size: 85%;">${hobbyDescription}</td>
+            <td class="stars">${createStarIcons()}</td>
+            <td><button class="btn btn-outline-secondary btn-sm" onclick="deleteHobby(this.parentNode.parentNode)">X</button></td>
+        `;
             table.appendChild(newRow);
             // Clear input fields
             document.getElementById("new-hobby").value = "";
@@ -214,6 +234,7 @@
         }
         updateChart();
     }
+
 
     function deleteHobby(row) {
         const table = document.querySelector("table tbody");
@@ -275,6 +296,7 @@
             });
         });
     }
+
     updateInitialHobbyValues();
     updateChart();
 </script>
