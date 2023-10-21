@@ -48,10 +48,6 @@
             width: 100%;
             padding: 4px;
         }
-
-        .reset-rating {
-            visibility: hidden;
-        }
     </style>
 </head>
 <body>
@@ -109,8 +105,6 @@
             },
         ],
     };
-
-
 
 
     // Create or update the chart
@@ -191,18 +185,6 @@
         updateChart();
     }
 
-    function resetHobby(resetButton) {
-        resetButton.style.visibility = 'hidden';
-        const starRating = resetButton.parentElement;
-        const ratingValue = starRating.querySelector('.rating-value');
-        ratingValue.textContent = '0';
-
-        const stars = starRating.querySelectorAll('.star');
-        stars.forEach((star) => star.classList.remove('clicked'));
-
-        updateChart();
-    }
-
     function createStarIcons() {
         let starsHtml = "";
         for (let i = 1; i <= 10; i++) {
@@ -210,7 +192,6 @@
         }
         return `<div class="star-rating" style="display: flex; align-items: center;">
         ${starsHtml} <span class="rating-value" style="color: #dcdada; flex-basis: 60%;">0</span>
-        <span class="reset-rating star" onclick="resetHobby(this)">×</span>
     </div>`;
     }
 
@@ -279,7 +260,7 @@
                 <td class="hobby-label">${hobby.name}</td>
                 <td style="color: #454545; font-size: 85%;">${hobby.description}</td>
                 <td class="stars">${createStarIcons()}</td>
-                <td><button class="btn btn-outline-secondary btn-sm" onclick="deleteHobby(this.parentNode.parentNode)">X</button></td>
+                <td><button class="btn btn-outline-secondary btn-sm" onclick="deleteHobby(this.parentNode.parentNode)">×</button></td>
             `;
         table.appendChild(newRow);
     });
